@@ -1,0 +1,7 @@
+patient_id,birth_date,ehr_start_date,ehr_end_date,death_date,marital_status,cohort,sex
+SYN001,1980-04-12,2010-01-01,2025-12-31,,Married,1,F
+SYN002,1992-08-03,2012-06-01,2025-12-31,,Single,1,M
+SYN003,1970-02-15,2009-01-01,2025-12-31,,Married,0,F
+SYN004,1986-11-20,2011-03-01,2025-12-31,,Unknown,0,M
+SYN005,1978-07-07,2010-01-01,2025-12-31,,Single,0,F
+SYN006,2001-01-30,2015-01-01,2025-12-31,,Single,1,M

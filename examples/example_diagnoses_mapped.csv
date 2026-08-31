@@ -1,0 +1,12 @@
+patient_id,phenotype,diagnosis_date
+EX001,cvd_any,2017-06-01
+EX001,hypert,2018-01-01
+EX001,dm2,2021-01-01
+EX002,obesity,2015-01-01
+EX002,dm2,2028-01-01
+EX003,cvd_any,2017-01-01
+EX003,dm1,2018-01-01
+EX004,cvd_any,2017-01-01
+EX004,hypert,2010-01-01
+EX004,obesity,2011-01-01
+EX004,dm2,2023-01-01

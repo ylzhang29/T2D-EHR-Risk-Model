@@ -1,0 +1,5 @@
+patient_id,birth_date,ehr_start_date,ehr_end_date,index_date,death_date,marital_status,cohort,sex
+EX001,1980-01-01,2010-01-01,2024-01-01,2019-01-01,,Married,1,F
+EX002,1970-01-01,2012-01-01,2027-01-01,2020-01-01,,Single,0,M
+EX003,1990-01-01,2015-01-01,2027-01-01,2020-01-01,,Unknown,1,F
+EX004,1960-01-01,2008-01-01,2024-01-01,2018-01-01,,Divorced,0,M

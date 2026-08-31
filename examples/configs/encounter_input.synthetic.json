@@ -1,0 +1,15 @@
+{
+  "model": "../../model/rf_external_10group_5y_calibrated.joblib",
+  "patients": "../synthetic_raw_patients.csv",
+  "encounters": "../synthetic_raw_encounters.csv",
+  "non_adhd_random_seed": "EXAMPLE-SITE-SEED-2026",
+  "diagnoses": "../synthetic_raw_diagnoses.csv",
+  "phenotype_code_list": "../../definitions/phenotype_code_list_REQUIRED.csv",
+  "medications": "../synthetic_raw_medications_atc.csv",
+  "medication_lookup": "../../definitions/external_atc_medication_lookup.csv",
+  "medication_code_system": "atc",
+  "output_dir": "../../external_validation_output/synthetic_encounter_mode",
+  "bootstrap": 0,
+  "subgroups": "sex,age_group",
+  "decision_thresholds": "0.005,0.01,0.02,0.03,0.05,0.075,0.10"
+}

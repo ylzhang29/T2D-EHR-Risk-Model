@@ -1,0 +1,8 @@
+{
+  "model": "../../model/rf_external_10group_5y_calibrated.joblib",
+  "final_input": "../synthetic_site_prepared_final_input.csv",
+  "output_dir": "../../external_validation_output/synthetic_final_table_mode",
+  "bootstrap": 0,
+  "subgroups": "sex,age_group",
+  "decision_thresholds": "0.005,0.01,0.02,0.03,0.05,0.075,0.10"
+}

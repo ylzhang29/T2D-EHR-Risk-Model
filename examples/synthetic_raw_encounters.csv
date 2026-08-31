@@ -1,0 +1,11 @@
+patient_id,encounter_date,encounter_type
+SYN001,2017-06-01,outpatient
+SYN002,2015-08-10,outpatient
+SYN003,2015-02-01,outpatient
+SYN003,2018-09-15,emergency
+SYN003,2020-01-20,inpatient
+SYN004,2014-05-01,outpatient
+SYN004,2019-07-18,telehealth
+SYN005,2016-03-12,outpatient
+SYN005,2019-10-04,inpatient
+SYN006,2018-01-01,outpatient
