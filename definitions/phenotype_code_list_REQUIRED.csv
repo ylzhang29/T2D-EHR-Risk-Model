@@ -1,0 +1,17 @@
+phenotype,code_system,code,description,status
+cvd_any,ICD-10-CM,I00-I70,"All category descendants from I00 through I70, inclusive",READY
+cvd_any,ICD-10-CM,I73.0,"I73.0 and descendants",READY
+cvd_any,ICD-10-CM,I74-I75,"All category descendants from I74 through I75, inclusive",READY
+hypert,ICD-10-CM,I10-I15,"Hypertensive diseases I10-I15 and descendants",READY
+hypert,ICD-9-CM,401-405,"Hypertensive disease categories 401-405 and descendants",READY
+dm1,ICD-10-CM,E10,"Type 1 diabetes mellitus and descendants",READY
+dm1,ICD-9-CM,250.X1,"Diabetes mellitus with type 1 fifth digit",READY
+dm1,ICD-9-CM,250.X3,"Diabetes mellitus with type 1 fifth digit; uncontrolled",READY
+obesity,ICD-10-CM,E65-E66,"Localized adiposity and obesity categories E65-E66 and descendants",READY_DIAGNOSIS_COMPONENT
+obesity,ICD-9-CM,278.0,"Overweight and obesity category 278.0 and descendants",READY_DIAGNOSIS_COMPONENT
+obesity,ICD-9-CM,278.1,"Localized adiposity category 278.1 and descendants",READY_DIAGNOSIS_COMPONENT
+dm2,ICD-10-CM,E11,"Type 2 diabetes mellitus and descendants",READY
+dm2,ICD-9-CM,250.X0,"Diabetes mellitus with type 2 or unspecified fifth digit",READY
+dm2,ICD-9-CM,250.X2,"Diabetes mellitus with type 2 or unspecified fifth digit; uncontrolled",READY
+adhd_landmark,ICD-10-CM,F90,"ADHD F90.0 F90.1 F90.2 F90.8 F90.9 and descendants; first diagnosis defines ADHD index",READY_COHORT_ONLY
+adhd_landmark,ICD-9-CM,314.0,"ADHD 314.0 and descendants; first diagnosis defines ADHD index",READY_COHORT_ONLY

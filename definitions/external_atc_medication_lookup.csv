@@ -1,0 +1,31 @@
+atc_code,ingredient,med_feature,source,primary_include,notes
+C03AA01,bendroflumethiazide,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03AA02,hydroflumethiazide,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03AA03,hydrochlorothiazide,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03AA04,chlorothiazide,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03AA05,polythiazide,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03AA06,trichlormethiazide,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03AA08,methyclothiazide,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03BA03,clopamide,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03BA04,chlortalidone (chlorthalidone),htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03BA08,metolazone,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03BA10,xipamide,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03BA11,indapamide,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03BC01,mersalyl,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03CA01,furosemide,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03CA02,bumetanide,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03CA04,torasemide (torsemide),htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03CC01,etacrynic acid (ethacrynic acid),htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03DA01,spironolactone,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03DA04,eplerenone,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03DA05,finerenone,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03DB01,amiloride,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03DB02,triamterene,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C03XA02,conivaptan,htn_diuretic,WHO_ATC_2026,1,direct ingredient code
+C10AA01,simvastatin,lipid_statin,WHO_ATC_2026,1,direct ingredient code
+C10AA02,lovastatin,lipid_statin,WHO_ATC_2026,1,direct ingredient code
+C10AA03,pravastatin,lipid_statin,WHO_ATC_2026,1,direct ingredient code
+C10AA04,fluvastatin,lipid_statin,WHO_ATC_2026,1,direct ingredient code
+C10AA05,atorvastatin,lipid_statin,WHO_ATC_2026,1,direct ingredient code
+C10AA07,rosuvastatin,lipid_statin,WHO_ATC_2026,1,direct ingredient code
+C10AA08,pitavastatin,lipid_statin,WHO_ATC_2026,1,direct ingredient code

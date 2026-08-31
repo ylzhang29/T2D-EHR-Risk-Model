@@ -1,0 +1,7 @@
+variable,data_type,definition
+patient_id,string,Deidentified patient identifier unique within the external cohort
+dm2,binary,"1 when the first qualifying recorded T2D diagnosis occurs strictly after the landmark and on or before min(EHR end date, death date); otherwise 0"
+event_years,float,"For dm2=1: (first post-landmark qualifying T2D date-index_date)/365.25. For dm2=0: (min(EHR end date, death date)-index_date)/365.25"
+cohort,optional,"ADHD status retained for subgroup evaluation but not used by the 10-group prediction model"
+sex,optional,External site's harmonized sex category retained for subgroup evaluation but not used by the 10-group model
+age_group,optional,Prespecified age category derived from age_index for subgroup evaluation

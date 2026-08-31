@@ -1,0 +1,25 @@
+model_input_order,clinical_group,predictor,data_type,definition,missing_or_absent_encoding
+1,Patient age at index,age_index,float,"Age in years at the prediction landmark: (index_date - birth_date) / 365.25",No missing values allowed
+2,Patient age at earliest EHR record,age_start,float,"Age in years at the start of observable EHR history: (ehr_start_date - birth_date) / 365.25",No missing values allowed
+3,Cardiovascular diagnosis (any CVD),cvd_any,binary,"1 when the first qualifying cardiovascular diagnosis occurs on or before the prediction landmark; otherwise 0",0 when no qualifying diagnosis
+4,Cardiovascular diagnosis (any CVD),cvd_any_age,float,"Age in years at the first qualifying cardiovascular diagnosis",-1 when cvd_any=0
+5,EHR history,months2index,float,"Observable EHR history before the prediction landmark in months: (index_date - ehr_start_date) / 30.4375",No missing values allowed
+6,Hypertension diagnosis,hypert,binary,"1 when the first qualifying hypertension diagnosis occurs on or before the prediction landmark; otherwise 0",0 when no qualifying diagnosis
+7,Hypertension diagnosis,hypert_age,float,"Age in years at the first qualifying hypertension diagnosis",-1 when hypert=0
+8,Antihypertensive medication (diuretics),rx_any_htn_diuretic,binary,"1 when any medication record matching the supplied diuretic lookup occurs strictly before the prediction landmark",0 when no qualifying record
+9,Antihypertensive medication (diuretics),rx_1y_htn_diuretic,binary,"1 when a qualifying diuretic start_date is from index_date-365 days through index_date-1 day",0 when none
+10,Antihypertensive medication (diuretics),rx_dates1y_htn_diuretic,integer,"Number of unique qualifying diuretic medication start dates from index_date-365 through index_date-1",0 when none
+11,Antihypertensive medication (diuretics),rx_days_htn_diuretic,float,"Days from the most recent qualifying diuretic start date to the prediction landmark",-100 when no prior qualifying record
+12,Antihypertensive medication (diuretics),rx_days_htn_diuretic_miss,binary,"Indicator that no prior qualifying diuretic medication record exists",1 when rx_any_htn_diuretic=0; otherwise 0
+13,Type 1 diabetes diagnosis,dm1,binary,"1 when the first qualifying type 1 diabetes diagnosis occurs on or before the prediction landmark; otherwise 0",0 when no qualifying diagnosis
+14,Type 1 diabetes diagnosis,dm1_age,float,"Age in years at the first qualifying type 1 diabetes diagnosis",-1 when dm1=0
+15,Marital status,Marital_1,binary,"1 for Married; otherwise 0",Exactly one Marital dummy must equal 1
+16,Marital status,Marital_2,binary,"1 for Single; otherwise 0",Exactly one Marital dummy must equal 1
+17,Marital status,Marital_3,binary,"1 for Unknown or missing marital status; otherwise 0",Exactly one Marital dummy must equal 1
+18,Lipid-lowering medication (statins),rx_any_lipid_statin,binary,"1 when any medication record matching the supplied statin lookup occurs strictly before the prediction landmark",0 when no qualifying record
+19,Lipid-lowering medication (statins),rx_1y_lipid_statin,binary,"1 when a qualifying statin start_date is from index_date-365 days through index_date-1 day",0 when none
+20,Lipid-lowering medication (statins),rx_dates1y_lipid_statin,integer,"Number of unique qualifying statin medication start dates from index_date-365 through index_date-1",0 when none
+21,Lipid-lowering medication (statins),rx_days_lipid_statin,float,"Days from the most recent qualifying statin start date to the prediction landmark",-100 when no prior qualifying record
+22,Lipid-lowering medication (statins),rx_days_lipid_statin_miss,binary,"Indicator that no prior qualifying statin medication record exists",1 when rx_any_lipid_statin=0; otherwise 0
+23,Obesity status,obesity,binary,"Training definition: qualifying E65-E66/278.0-278.1 diagnosis or BMI >=30 before the landmark. External definition: qualifying diagnosis only because BMI is unavailable",0 when no qualifying external diagnosis; diagnosis-only underascertainment must be reported
+24,Obesity status,obesity_age,float,"Age at first qualifying obesity diagnosis externally; training BMI-only obesity may not have an equivalent diagnosis age",-1 when external obesity diagnosis is absent

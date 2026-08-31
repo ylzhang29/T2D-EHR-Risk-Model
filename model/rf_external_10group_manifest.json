@@ -1,0 +1,76 @@
+{
+  "artifact_type": "t2d_rf_external_10group_v1",
+  "horizon_years": 5.0,
+  "model_file": "model/rf_external_10group_5y_calibrated.joblib",
+  "model_sha256": "54810ca772030bbf9534092fa9cebc6b95295e3b039bdde209fbb2bbbf82d611",
+  "feature_names_in_order": [
+    "age_index",
+    "age_start",
+    "cvd_any",
+    "cvd_any_age",
+    "months2index",
+    "hypert",
+    "hypert_age",
+    "rx_any_htn_diuretic",
+    "rx_1y_htn_diuretic",
+    "rx_dates1y_htn_diuretic",
+    "rx_days_htn_diuretic",
+    "rx_days_htn_diuretic_miss",
+    "dm1",
+    "dm1_age",
+    "Marital_1",
+    "Marital_2",
+    "Marital_3",
+    "rx_any_lipid_statin",
+    "rx_1y_lipid_statin",
+    "rx_dates1y_lipid_statin",
+    "rx_days_lipid_statin",
+    "rx_days_lipid_statin_miss",
+    "obesity",
+    "obesity_age"
+  ],
+  "clinical_groups_in_order": [
+    "single::age_index",
+    "single::age_start",
+    "diagnosis::cvd_any",
+    "single::months2index",
+    "diagnosis::hypert",
+    "rx::htn_diuretic",
+    "diagnosis::dm1",
+    "category::Marital",
+    "rx::lipid_statin",
+    "diagnosis::obesity"
+  ],
+  "clinical_group_display_names_in_order": [
+    "Patient age at index",
+    "Patient age at earliest EHR record",
+    "Cardiovascular diagnosis (any CVD)",
+    "EHR history",
+    "Hypertension diagnosis",
+    "Antihypertensive medication (diuretics)",
+    "Type 1 diabetes diagnosis",
+    "Marital status",
+    "Lipid-lowering medication (statins)",
+    "Obesity status"
+  ],
+  "deployment_calibration": {
+    "status": "embedded and locked before external outcomes",
+    "method": "IPCW-weighted logistic recalibration",
+    "formula": "expit(intercept + slope * logit(raw_risk))",
+    "intercept": -0.8318638646148835,
+    "slope": 0.8717900632103136
+  },
+  "n_features": 24,
+  "n_groups": 10,
+  "software_compatibility": {
+    "python": "3.8 or later",
+    "scikit_learn": "1.3.2",
+    "joblib": "1.4.2"
+  },
+  "privacy_review": {
+    "direct_identifiers_present": false,
+    "patient_level_records_present": false,
+    "internal_file_paths_present": false,
+    "internal_validation_statistics_present": false
+  }
+}
