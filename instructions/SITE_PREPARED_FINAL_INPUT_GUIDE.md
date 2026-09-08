@@ -31,4 +31,4 @@ Schema validation cannot verify how the site constructed its table. Return an
 attestation confirming that the locked cohort and index rules were followed,
 predictors used no post-index information, baseline T2D was excluded, outcome
 and censoring were constructed as specified, natural outcome frequency was
-retained, and all approved deviations were documented.
+retained, and all material deviations were documented.

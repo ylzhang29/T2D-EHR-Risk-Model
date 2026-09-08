@@ -2,7 +2,7 @@
 
 Complete this short checklist before constructing the validation cohort or
 examining outcomes. Refer to the root `README.md` for the full definitions.
-Document any deviation and obtain approval before outcome evaluation.
+Document any deviation before outcome evaluation.
 
 ## 1. Input pathway
 
@@ -15,7 +15,7 @@ Select one:
 
 Encounter file available: Yes / No
 
-If no, describe the approved source of the preassigned non-ADHD `index_date`:
+If no, describe the source of the preassigned non-ADHD `index_date`:
 ___________________________________________________________________________
 
 ## 2. Cohort and index
@@ -49,7 +49,7 @@ to ICD-10-CM: ______________________________________________________________
 ATC combination products are represented or decomposed at the ingredient
 level: Yes / No / Not applicable
 
-If no, describe the approved medication-mapping deviation: _________________
+If no, describe the medication-mapping limitation: _________________________
 
 Medication record type (for example, prescribed or dispensed): _____________
 
@@ -72,10 +72,4 @@ Any other predictor or date-precision deviation: ___________________________
 - [ ] Patient-level inputs, constructed predictors, and predictions will remain
   at the site; only disclosure-reviewed aggregate outputs will be returned.
 
-Prespecified decision thresholds, if DCA/CIC will be performed: _____________
-
-## Approval
-
-Site lead/date: ____________________________________________________________
-
-Coordinating investigator/date: ___________________________________________
+Completed by/date: _________________________________________________________

@@ -21,14 +21,16 @@ date with the lowest stable SHA-256 score derived from the declared site seed,
 patient ID, and encounter date. This is reproducible and independent of input
 row order.
 
-If encounters are unavailable, add an approved `index_date` to the patient
+If encounters are unavailable, add a documented `index_date` to the patient
 file and omit encounter and seed settings. Document the source of every
 non-ADHD index and confirm that future T2D status and post-index predictors were
 not used.
 
-Use the distributed phenotype and medication lookup files unchanged. Resolve
-ATC combination products and the obesity-definition deviation before outcome
-evaluation. Synthetic inputs and configurations are in `examples/`.
+Use the distributed phenotype and medication lookup files unchanged. Confirm
+that dated medication records use the supplied ingredient-level codes and note
+whether combination products are represented at the ingredient level. Select
+and document the obesity definition. Synthetic inputs and configurations are
+in `examples/`.
 
 Run:
 

@@ -363,10 +363,11 @@ Original inputs, constructed patient-level predictors, and patient-level raw or
 calibrated predictions remain behind the site's firewall. Never return them
 without separate authorization.
 
-The site may return only `RETURN_TO_COORDINATING_CENTER`, the completed
-feasibility precheck, the Mode B attestation when applicable, and a description
-of approved deviations. The site must apply its disclosure policy to small cells
-before returning aggregate files.
+The site may return only `RETURN_TO_COORDINATING_CENTER`, the Mode B attestation
+when applicable, and a description of material deviations. The feasibility
+precheck is for local preparation and does not need to be returned. The site
+must apply its disclosure policy to small cells before returning aggregate
+files.
 
 ## 10. What success looks like
 

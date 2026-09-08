@@ -12,9 +12,8 @@ After local disclosure review, the site may return:
 - `RETURN_TO_COORDINATING_CENTER/run_manifest.json`;
 - `RETURN_TO_COORDINATING_CENTER/external_model_input_audit.json`;
 - `RETURN_TO_COORDINATING_CENTER/summary_results/`;
-- the completed feasibility precheck and Mode B attestation, when applicable;
-  and
-- a description of every approved deviation.
+- the Mode B attestation, when applicable; and
+- a description of material deviations from the protocol.
 
 Review subgroup and audit tables for small cells and suppress or coarsen them
 according to local policy. Never move patient-level files into the return
