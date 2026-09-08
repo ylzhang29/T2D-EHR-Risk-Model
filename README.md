@@ -287,14 +287,16 @@ Use `definitions/phenotype_code_list_REQUIRED.csv` unchanged. In summary:
 | T2D | ICD-10-CM E11; ICD-9-CM 250.x0 and 250.x2 |
 
 The supplied CVD definition currently contains ICD-10-CM rules only. A site
-requiring ICD-9-CM CVD ascertainment must obtain approval for a frozen crosswalk
-before outcomes are examined.
+requiring ICD-9-CM CVD ascertainment must document the crosswalk used to map
+from ICD-9-CM to ICD-10-CM.
 
-Medication records qualify only when their codes match a row with
-`primary_include=1` in the supplied ATC or RxNorm lookup. ATC codes must be exact
-fifth-level codes. Combination products must be decomposed to ingredient-level
-records or handled through an approved, frozen crosswalk. Medication records do
-not establish dispensing, adherence, continuous use, or treatment duration.
+Medication records were identified using the supplied ATC or RxNorm
+ingredient-level codes. ATC codes must be exact fifth-level codes, and records
+qualify only when their codes match a row with `primary_include=1` in the
+supplied lookup. Combination products must be decomposed to ingredient-level
+records. Medication records used in model development were prescription records
+and do not establish dispensing, adherence, continuous use, or treatment
+duration.
 
 ### Predictor consistency checks
 

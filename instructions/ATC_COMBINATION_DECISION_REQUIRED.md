@@ -6,8 +6,11 @@ represented as ingredient-level records.
 - If yes, use the supplied exact fifth-level ATC lookup unchanged.
 - If no, decompose combination products into ingredient records before applying
   the lookup.
-- If decomposition is unavailable, obtain approval for a frozen crosswalk or a
-  prespecified sensitivity analysis. Do not add codes after viewing results.
+- If decomposition is unavailable, document the limitation before outcome
+  evaluation. Do not add codes after viewing results.
+
+Medication records used in model development were prescription records; they
+do not establish dispensing, adherence, continuous use, or treatment duration.
 
 Record and return:
 

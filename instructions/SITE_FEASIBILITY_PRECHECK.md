@@ -43,10 +43,15 @@ Any cohort or index deviation: _____________________________________________
 
 Available diagnosis coding systems and years: ______________________________
 
+If ICD-9-CM is used for CVD ascertainment, crosswalk used to map from ICD-9-CM
+to ICD-10-CM: ______________________________________________________________
+
 ATC combination products are represented or decomposed at the ingredient
 level: Yes / No / Not applicable
 
 If no, describe the approved medication-mapping deviation: _________________
+
+Medication record type (for example, prescribed or dispensed): _____________
 
 Obesity definition selected for this validation:
 
