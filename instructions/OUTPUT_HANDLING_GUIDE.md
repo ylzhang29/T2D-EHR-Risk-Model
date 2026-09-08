@@ -1,35 +1,21 @@
-# Output handling and return instructions
+# Output handling
 
-The pipeline creates two visibly separated directories.
+Keep behind the external site's firewall:
 
-## `LOCAL_ONLY_DO_NOT_RETURN`
+- all source inputs and intermediate files;
+- `LOCAL_ONLY_DO_NOT_RETURN/external_model_input.parquet`;
+- `LOCAL_ONLY_DO_NOT_RETURN/external_patient_scores.parquet`; and
+- every other patient-level output.
 
-These files remain behind the external site's firewall:
+After local disclosure review, the site may return:
 
-- `external_model_input.parquet`: patient-level constructed predictors,
-  outcome, follow-up, and subgroup fields.
-- `external_patient_scores.parquet`: patient-level raw and calibrated risks.
-- `.matplotlib/`: local software cache.
-- All original input and intermediate source files.
+- `RETURN_TO_COORDINATING_CENTER/run_manifest.json`;
+- `RETURN_TO_COORDINATING_CENTER/external_model_input_audit.json`;
+- `RETURN_TO_COORDINATING_CENTER/summary_results/`;
+- the completed feasibility precheck and Mode B attestation, when applicable;
+  and
+- a description of every approved deviation.
 
-Do not email, upload, or return these files without separate data-transfer and
-privacy authorization.
-
-## `RETURN_TO_COORDINATING_CENTER`
-
-Return this directory only after the site privacy officer or designated analyst
-confirms that its contents satisfy local disclosure rules:
-
-- `run_manifest.json`: input filenames and hashes, seed, software versions,
-  calibration provenance, thresholds, and subgroup plan; no patient records.
-- `external_model_input_audit.json`: aggregate cohort construction, exclusions,
-  mapping coverage, age summaries, and medication matching diagnostics.
-- `summary_results/`: aggregate metrics, bootstrap results, calibration, ROC/PR
-  curve coordinates, subgroup summaries when estimable, DCA/CIC tables, and
-  figures.
-- Completed `SITE_FEASIBILITY_PRECHECK.md` and a written description of every
-  approved deviation.
-
-Before return, inspect small cells in subgroup and audit tables. Suppress or
-coarsen them according to the site's disclosure policy; document any change.
-Never move patient-level files into the return directory.
+Review subgroup and audit tables for small cells and suppress or coarsen them
+according to local policy. Never move patient-level files into the return
+directory without separate authorization.

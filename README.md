@@ -220,23 +220,106 @@ At five years, earlier censoring is handled with inverse-probability-of-
 censoring weights rather than treated as a confirmed non-event. Death is treated
 as censoring, not as a modeled competing risk.
 
-## 7. Locked predictor rules
+## 7. Exact 24-predictor contract
 
-The ten groups are age at landmark, age at EHR start, any CVD, EHR history,
-hypertension, diuretic medication history, type 1 diabetes, marital status,
-statin medication history, and obesity. Together they produce 24 variables.
+Use the following common definitions:
 
-- Predictor diagnoses: first qualifying record on/before landmark.
-- Medications: qualifying record strictly before landmark.
-- Medication records do not establish dispensing or adherence.
-- Absent diagnosis age: `-1`.
-- Absent medication recency: `-100`; corresponding missing flag: `1`.
-- Marital status: Married, Single, or Unknown indicators.
-- Do not rename, reorder, standardize, refit, or impute the locked variables.
+- predictor diagnoses: `diagnosis_date <= index_date`;
+- predictor medications: `start_date < index_date`;
+- prior-year medication window:
+  `index_date - 365 days <= start_date < index_date`;
+- age in years: elapsed days divided by `365.25`; and
+- EHR history in months: elapsed days divided by `30.4375`.
 
-The development obesity definition used diagnosis or BMI >=30. If BMI is not
-available externally, diagnosis-only obesity is a documented replication
-limitation and must be reported.
+Do not round, standardize, rename, reorder, or site-impute predictors. An absent
+diagnosis is encoded as indicator `0` and diagnosis age `-1`. When no qualifying
+prior medication record exists, recency is `-100` and its `_miss` indicator is
+`1`.
+
+The final table must contain these predictors in this exact order:
+
+| # | Predictor | Type/unit | Exact construction | Absent/missing encoding |
+|---:|---|---|---|---|
+| 1 | `age_index` | Float, years | `(index_date - birth_date).days / 365.25` | Missing not allowed |
+| 2 | `age_start` | Float, years | `(ehr_start_date - birth_date).days / 365.25` | Missing not allowed |
+| 3 | `cvd_any` | Binary | `1` if any qualifying CVD diagnosis occurs on/before index | `0` |
+| 4 | `cvd_any_age` | Float, years | `(first qualifying CVD date - birth_date).days / 365.25` | `-1` when `cvd_any=0` |
+| 5 | `months2index` | Float, months | `(index_date - ehr_start_date).days / 30.4375` | Missing not allowed; must be nonnegative |
+| 6 | `hypert` | Binary | `1` if any qualifying hypertension diagnosis occurs on/before index | `0` |
+| 7 | `hypert_age` | Float, years | `(first qualifying hypertension date - birth_date).days / 365.25` | `-1` when `hypert=0` |
+| 8 | `rx_any_htn_diuretic` | Binary | `1` if any record matching the locked `htn_diuretic` lookup occurs strictly before index | `0` |
+| 9 | `rx_1y_htn_diuretic` | Binary | `1` if any qualifying record occurs in `[index-365 days, index)` | `0` |
+| 10 | `rx_dates1y_htn_diuretic` | Integer, dates | Number of distinct qualifying start dates in `[index-365 days, index)`; duplicates on one date count once | `0` |
+| 11 | `rx_days_htn_diuretic` | Float, days | `(index_date - most recent qualifying pre-index start_date).days`; the record may be more than one year old | `-100` if no prior record |
+| 12 | `rx_days_htn_diuretic_miss` | Binary | `1` if no qualifying diuretic record exists before index | `1` if no prior record; otherwise `0` |
+| 13 | `dm1` | Binary | `1` if any qualifying T1D diagnosis occurs on/before index | `0` |
+| 14 | `dm1_age` | Float, years | `(first qualifying T1D date - birth_date).days / 365.25` | `-1` when `dm1=0` |
+| 15 | `Marital_1` | Binary | `1` for harmonized `Married`; otherwise `0` | Exactly one marital indicator must be 1 |
+| 16 | `Marital_2` | Binary | `1` for harmonized `Single`; otherwise `0` | Exactly one marital indicator must be 1 |
+| 17 | `Marital_3` | Binary | `1` for other, unknown, blank, or missing marital status | `1` when unavailable |
+| 18 | `rx_any_lipid_statin` | Binary | `1` if any record matching the locked `lipid_statin` lookup occurs strictly before index | `0` |
+| 19 | `rx_1y_lipid_statin` | Binary | `1` if any qualifying record occurs in `[index-365 days, index)` | `0` |
+| 20 | `rx_dates1y_lipid_statin` | Integer, dates | Number of distinct qualifying start dates in `[index-365 days, index)`; duplicates on one date count once | `0` |
+| 21 | `rx_days_lipid_statin` | Float, days | `(index_date - most recent qualifying pre-index start_date).days`; the record may be more than one year old | `-100` if no prior record |
+| 22 | `rx_days_lipid_statin_miss` | Binary | `1` if no qualifying statin record exists before index | `1` if no prior record; otherwise `0` |
+| 23 | `obesity` | Binary | Development: qualifying obesity diagnosis or BMI >=30 kg/m2 before index. The supplied raw-data builder uses qualifying diagnosis records only | `0` when no qualifying evidence under the selected rule |
+| 24 | `obesity_age` | Float, years | Supplied builder: `(first qualifying obesity diagnosis date - birth_date).days / 365.25` | `-1` when no qualifying obesity diagnosis exists |
+
+Marital status is one-hot encoded:
+
+| Harmonized status | `Marital_1` | `Marital_2` | `Marital_3` |
+|---|---:|---:|---:|
+| Married | 1 | 0 | 0 |
+| Single | 0 | 1 | 0 |
+| Other, unknown, blank, or missing | 0 | 0 | 1 |
+
+Do not use post-index marital information. If multiple dated values exist,
+declare and freeze the rule used to select the value on or before index.
+
+Use `definitions/phenotype_code_list_REQUIRED.csv` unchanged. In summary:
+
+| Phenotype | Supplied definition |
+|---|---|
+| CVD | ICD-10-CM I00-I70 and descendants; I73.0 and descendants; I74-I75 and descendants |
+| Hypertension | ICD-10-CM I10-I15; ICD-9-CM 401-405 and descendants |
+| T1D | ICD-10-CM E10; ICD-9-CM 250.x1 and 250.x3 |
+| Obesity diagnosis | ICD-10-CM E65-E66; ICD-9-CM 278.0-278.1 |
+| T2D | ICD-10-CM E11; ICD-9-CM 250.x0 and 250.x2 |
+
+The supplied CVD definition currently contains ICD-10-CM rules only. A site
+requiring ICD-9-CM CVD ascertainment must obtain approval for a frozen crosswalk
+before outcomes are examined.
+
+Medication records qualify only when their codes match a row with
+`primary_include=1` in the supplied ATC or RxNorm lookup. ATC codes must be exact
+fifth-level codes. Combination products must be decomposed to ingredient-level
+records or handled through an approved, frozen crosswalk. Medication records do
+not establish dispensing, adherence, continuous use, or treatment duration.
+
+### Predictor consistency checks
+
+Before scoring, confirm:
+
+```text
+age_start <= age_index
+months2index >= 0
+abs(months2index - (age_index - age_start)*12) <= 0.2 months
+
+diagnosis indicator=0 => corresponding age=-1
+diagnosis indicator=1 => 0 <= corresponding age <= age_index
+Marital_1 + Marital_2 + Marital_3 = 1
+
+rx_any=0 => rx_1y=0, rx_dates1y=0, rx_days=-100, rx_days_miss=1
+rx_any=1 => rx_days>=1 and rx_days_miss=0
+rx_1y=0  => rx_dates1y=0
+rx_1y=1  => rx_dates1y>=1 and rx_days<=365
+rx_dates1y is a nonnegative integer
+```
+
+The development obesity definition used diagnosis or BMI >=30, whereas the
+supplied raw-data builder uses diagnosis only. The site must lock its obesity
+rule before evaluating outcomes and report any deviation. See
+`instructions/KNOWN_EXTERNAL_DEVIATIONS.md`.
 
 ## 8. Prespecified analysis
 
