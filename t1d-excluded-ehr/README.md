@@ -21,6 +21,45 @@ calibration. Do not refit, tune, or recalibrate them for the primary external
 validation. The package checks that the selected model and predictor contract
 match before scoring.
 
+## Predictors at a glance
+
+Use this table to determine whether the site can run the 5-group model, the
+10-group model, or both. Exact definitions, dates, and sentinel values are in
+the model-requirement tables and predictor dictionary.
+
+| Predictor | 5-group | 10-group | Source type |
+|---|:---:|:---:|---|
+| `age_index` | Yes | Yes | Patient dates |
+| `age_start` |  | Yes | Patient dates |
+| `months2index` |  | Yes | Patient dates |
+| `depress` | Yes |  | Diagnosis |
+| `depress_age` | Yes |  | Diagnosis + birth date |
+| `PDD` |  | Yes | Diagnosis |
+| `PDD_age` |  | Yes | Diagnosis + birth date |
+| `gestationaldm` |  | Yes | Diagnosis |
+| `gestationaldm_age` |  | Yes | Diagnosis + birth date |
+| `hf` |  | Yes | Diagnosis |
+| `hf_age` |  | Yes | Diagnosis + birth date |
+| `obesity` | Yes | Yes | Diagnosis |
+| `obesity_age` | Yes | Yes | Diagnosis + birth date |
+| `sleep` |  | Yes | Diagnosis |
+| `sleep_age` |  | Yes | Diagnosis + birth date |
+| `smoking_proxy_diagnosis` |  | Yes | Diagnosis-code proxy |
+| `rx_any_lipid_statin` | Yes |  | Dated statin prescription |
+| `rx_1y_lipid_statin` | Yes |  | Dated statin prescription |
+| `rx_dates1y_lipid_statin` | Yes |  | Dated statin prescription |
+| `rx_days_lipid_statin` | Yes |  | Dated statin prescription |
+| `rx_days_lipid_statin_miss` | Yes |  | Dated statin prescription |
+| `rx_any_mood_antiep` | Yes | Yes | Dated mood-stabilizing/antiepileptic prescription |
+| `rx_1y_mood_antiep` | Yes | Yes | Dated mood-stabilizing/antiepileptic prescription |
+| `rx_dates1y_mood_antiep` | Yes | Yes | Dated mood-stabilizing/antiepileptic prescription |
+| `rx_days_mood_antiep` | Yes | Yes | Dated mood-stabilizing/antiepileptic prescription |
+| `rx_days_mood_antiep_miss` | Yes | Yes | Dated mood-stabilizing/antiepileptic prescription |
+
+The 5-group model requires 15 predictors; the 10-group model requires 19.
+Testing both requires the 26 unique predictors shown above. Medication
+prescriptions must be dated and mapped with the supplied ATC or RxNorm lookup.
+
 ## Who should be included
 
 There is no age restriction. The prediction date is:
@@ -102,9 +141,24 @@ Use the template that matches the selected model:
 
 - `definitions/external_input_template_5group.csv`
 - `definitions/external_input_template_10group.csv`
+- `definitions/external_input_template_both_models.csv`
 
-When testing both models in one run, a site-prepared table must contain the
-union of both templates' predictor columns, as shown in the synthetic example.
+To test both models in one final-table run, use
+`external_input_template_both_models.csv`. It contains the 26 unique predictor
+columns required across both models, plus `patient_id`, `dm2`, `event_years`,
+and optional subgroup columns. Do not submit separate 5-group and 10-group
+tables in the same run.
+
+Set the configuration to:
+
+```json
+"model_variants": ["compact5", "compact10"]
+```
+
+The supplied `examples/configs/final_table_input.synthetic.json` already uses
+this setting and the synthetic final table has the same combined structure.
+For longitudinal input, the package constructs this combined predictor table
+automatically when both variants are selected.
 
 ## Predictor timing
 

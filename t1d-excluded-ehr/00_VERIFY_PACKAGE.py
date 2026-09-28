@@ -71,6 +71,9 @@ def verify_models()->None:
         if abs(float(manifest["calibration"]["intercept"])-float(calibration["intercept"]))>1e-12: raise ValueError(f"{variant}: calibration intercept mismatch")
         if abs(float(manifest["calibration"]["slope"])-float(calibration["slope"]))>1e-12: raise ValueError(f"{variant}: calibration slope mismatch")
         print(f"[OK] {variant}: {len(expected)} predictors; bundle SHA-256 {sha256(path)}")
+    combined_template=pd.read_csv(ROOT/"definitions/external_input_template_both_models.csv",nrows=0)
+    combined_expected=["patient_id"]+EXPECTED["compact5"]+[name for name in EXPECTED["compact10"] if name not in EXPECTED["compact5"]]+["dm2","event_years","cohort","sex","age_group"]
+    if combined_template.columns.tolist()!=combined_expected: raise ValueError("both-models input-template columns/order mismatch")
 
 
 def verify_release_text()->None:
