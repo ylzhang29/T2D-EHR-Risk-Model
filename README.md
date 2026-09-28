@@ -60,9 +60,12 @@ removes its temporary outputs automatically.
 3. Run the included synthetic test.
 4. Use either longitudinal inputs, so the package builds predictors, or a
    site-prepared final table with the exact required columns and sentinels.
-5. Prespecify decision thresholds before reviewing outcomes. Keep the cohort's
+5. An ADHD-only validation is permitted. A non-ADHD cohort is optional; when
+   included, follow the selected package's index-date rules and retain its
+   natural composition.
+6. Prespecify decision thresholds before reviewing outcomes. Keep the cohort's
    natural event frequency; do not balance or select patients using future T2D.
-6. Run the package configuration and return only the approved aggregate output
+7. Run the package configuration and return only the approved aggregate output
    directory.
 
 The saved models and their transported calibration must not be refit, tuned, or

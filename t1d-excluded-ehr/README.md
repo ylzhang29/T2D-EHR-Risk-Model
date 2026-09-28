@@ -62,7 +62,12 @@ prescriptions must be dated and mapped with the supplied ATC or RxNorm lookup.
 
 ## Who should be included
 
-There is no age restriction. The prediction date is:
+There is no age restriction. A validation may include ADHD participants only,
+or a natural cohort containing both ADHD and non-ADHD participants. The
+non-ADHD cohort is optional; when included, do not select or match it using
+future T2D status.
+
+The prediction date is:
 
 - ADHD: 365 days after the first qualifying ADHD diagnosis.
 - No ADHD: a reproducibly selected encounter date, or a documented

@@ -63,6 +63,10 @@ Before examining outcomes, confirm that coding systems, date precision, and
 ingredient-level medication records can support the definitions below. Document
 any material deviation in the returned aggregate materials.
 
+A validation may include ADHD participants only, or a natural cohort containing
+both ADHD and non-ADHD participants. The non-ADHD cohort is optional; when it
+is included, do not select or match it using future T2D status.
+
 Primary cohort rules:
 
 - No age restriction for ADHD or non-ADHD patients.
