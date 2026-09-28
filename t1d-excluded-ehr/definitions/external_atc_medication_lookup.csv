@@ -1,0 +1,31 @@
+atc_code,ingredient,med_feature,primary_include,notes
+C10AA01,simvastatin,lipid_statin,1,exact fifth-level ingredient code; combination products must be decomposed
+C10AA02,lovastatin,lipid_statin,1,exact fifth-level ingredient code; combination products must be decomposed
+C10AA03,pravastatin,lipid_statin,1,exact fifth-level ingredient code; combination products must be decomposed
+C10AA04,fluvastatin,lipid_statin,1,exact fifth-level ingredient code; combination products must be decomposed
+C10AA05,atorvastatin,lipid_statin,1,exact fifth-level ingredient code; combination products must be decomposed
+C10AA07,rosuvastatin,lipid_statin,1,exact fifth-level ingredient code; combination products must be decomposed
+C10AA08,pitavastatin,lipid_statin,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AA02,phenobarbital,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AB02,phenytoin,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AB05,fosphenytoin,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AD01,ethosuximide,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AF01,carbamazepine,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AF02,oxcarbazepine,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AF04,Eslicarbazepine,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AG01,valproic acid,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AG04,vigabatrin,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AG06,tiagabine,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX09,lamotrigine,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX10,felbamate,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX11,topiramate,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX12,gabapentin,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX14,levetiracetam,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX15,zonisamide,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX16,pregabalin,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX18,lacosamide,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX20,rufinamide,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX21,perampanel,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX22,brivaracetam,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX23,cenobamate,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed
+N03AX24,cannabidiol,mood_antiep,1,exact fifth-level ingredient code; combination products must be decomposed

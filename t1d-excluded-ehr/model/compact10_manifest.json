@@ -1,0 +1,18 @@
+{
+  "model_variant": "compact10",
+  "label": "T1D-excluded 10-group EHR random forest",
+  "bundle": "compact_10group_5y_bundle.joblib",
+  "predictor_contract": "predictors_compact10.csv",
+  "calibrated_bundle_sha256": "b391ac49fbc7b6596d50ba0610f2bebdce517b487740d5e0ac76d4ba22a32a40",
+  "predictor_contract_sha256": "a54f871be75e9558e5f563377ec61b31c871d5addfa31978ef12d91705d5dc83",
+  "predictor_count": 19,
+  "groups": ["diagnosis::PDD", "diagnosis::gestationaldm", "diagnosis::hf", "diagnosis::obesity", "diagnosis::sleep", "rx::mood_antiep", "single::age_index", "single::age_start", "single::months2index", "single::smoking_proxy_diagnosis"],
+  "horizon_years": 5,
+  "calibration": {
+    "method": "frozen logistic intercept-and-slope calibration",
+    "fit_source": "validation data before external use",
+    "parameters_source": "embedded bundle; do not refit for the primary analysis",
+    "intercept": -0.1262577329625753,
+    "slope": 1.071759839334739
+  }
+}

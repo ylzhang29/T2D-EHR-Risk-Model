@@ -1,0 +1,16 @@
+order,predictor
+1,depress
+2,depress_age
+3,obesity
+4,obesity_age
+5,rx_any_lipid_statin
+6,rx_1y_lipid_statin
+7,rx_dates1y_lipid_statin
+8,rx_days_lipid_statin
+9,rx_days_lipid_statin_miss
+10,rx_any_mood_antiep
+11,rx_1y_mood_antiep
+12,rx_dates1y_mood_antiep
+13,rx_days_mood_antiep
+14,rx_days_mood_antiep_miss
+15,age_index

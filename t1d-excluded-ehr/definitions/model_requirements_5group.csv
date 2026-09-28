@@ -1,0 +1,16 @@
+group,predictor,required_source_data,exact_requirement,absent_or_missing_encoding
+Diagnosis: depression,depress,Dated diagnosis records,Any qualifying depression diagnosis on or before index,0 when absent
+Diagnosis: depression,depress_age,Dated diagnosis records plus birth_date,Age at first qualifying depression diagnosis on or before index,-1 when absent
+Diagnosis: obesity,obesity,Dated diagnosis records,Any qualifying obesity diagnosis on or before index,0 when absent
+Diagnosis: obesity,obesity_age,Dated diagnosis records plus birth_date,Age at first qualifying obesity diagnosis on or before index,-1 when absent
+Medication: statin,rx_any_lipid_statin,Dated prescription records plus ATC or RxNorm statin lookup,Any qualifying statin prescription start before index,0 when absent
+Medication: statin,rx_1y_lipid_statin,Dated prescription records plus ATC or RxNorm statin lookup,Any qualifying statin start from index minus 365 days through the day before index,0 when absent
+Medication: statin,rx_dates1y_lipid_statin,Dated prescription records plus ATC or RxNorm statin lookup,Number of distinct qualifying statin start dates from index minus 365 days through the day before index,0 when absent
+Medication: statin,rx_days_lipid_statin,Dated prescription records plus ATC or RxNorm statin lookup,Days from most recent qualifying pre-index statin start to index,-100 when absent
+Medication: statin,rx_days_lipid_statin_miss,Dated prescription records plus ATC or RxNorm statin lookup,Indicator that no qualifying statin start exists before index,1 when absent otherwise 0
+Medication: mood stabilizing or antiepileptic,rx_any_mood_antiep,Dated prescription records plus ATC or RxNorm mood_antiep lookup,Any qualifying prescription start before index,0 when absent
+Medication: mood stabilizing or antiepileptic,rx_1y_mood_antiep,Dated prescription records plus ATC or RxNorm mood_antiep lookup,Any qualifying start from index minus 365 days through the day before index,0 when absent
+Medication: mood stabilizing or antiepileptic,rx_dates1y_mood_antiep,Dated prescription records plus ATC or RxNorm mood_antiep lookup,Number of distinct qualifying start dates from index minus 365 days through the day before index,0 when absent
+Medication: mood stabilizing or antiepileptic,rx_days_mood_antiep,Dated prescription records plus ATC or RxNorm mood_antiep lookup,Days from most recent qualifying pre-index start to index,-100 when absent
+Medication: mood stabilizing or antiepileptic,rx_days_mood_antiep_miss,Dated prescription records plus ATC or RxNorm mood_antiep lookup,Indicator that no qualifying start exists before index,1 when absent otherwise 0
+Patient dates,age_index,birth_date plus index_date,Age at index calculated as elapsed days divided by 365.25,Missing not allowed

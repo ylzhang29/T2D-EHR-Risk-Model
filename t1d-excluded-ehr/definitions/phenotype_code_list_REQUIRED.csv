@@ -1,0 +1,32 @@
+phenotype,code_system,code,description
+adhd_landmark,ICD-10-CM,F90,ADHD and descendants; first dated diagnosis defines ADHD index source
+adhd_landmark,ICD-9-CM,314.0,ADHD and descendants
+t1d,ICD-10-CM,E10,Type 1 diabetes and descendants
+t1d,ICD-9-CM,250.X1,Type 1 diabetes fifth digit
+t1d,ICD-9-CM,250.X3,Type 1 diabetes fifth digit uncontrolled
+t2d,ICD-10-CM,E11,Type 2 diabetes and descendants
+t2d,ICD-9-CM,250.X0,Type 2 or unspecified diabetes fifth digit
+t2d,ICD-9-CM,250.X2,Type 2 or unspecified diabetes fifth digit uncontrolled
+depress,ICD-10-CM,F32-F33,Depressive episodes and recurrent depressive disorder
+depress,ICD-9-CM,296.2,Major depressive disorder single episode
+depress,ICD-9-CM,296.3,Major depressive disorder recurrent episode
+depress,ICD-9-CM,311,Depressive disorder not elsewhere classified
+obesity,ICD-10-CM,E65-E66,Localized adiposity and obesity
+obesity,ICD-9-CM,278.0,Overweight and obesity
+obesity,ICD-9-CM,278.1,Localized adiposity
+pdd,ICD-10-CM,F84,Pervasive developmental disorders and descendants
+pdd,ICD-9-CM,299,Pervasive developmental disorders and descendants
+gestationaldm,ICD-10-CM,O24.4,Gestational diabetes mellitus and descendants
+gestationaldm,ICD-9-CM,648.8,Abnormal glucose tolerance complicating pregnancy childbirth or puerperium
+hf,ICD-10-CM,I50,Heart failure and descendants
+hf,ICD-9-CM,428,Heart failure and descendants
+sleep,ICD-10-CM,G47,Sleep disorders and descendants
+sleep,ICD-10-CM,F51,Nonorganic sleep disorders and descendants
+sleep,ICD-9-CM,307.4,Specific disorders of sleep of nonorganic origin
+sleep,ICD-9-CM,327,Organic sleep disorders and descendants
+sleep,ICD-9-CM,780.5,Sleep disturbance and descendants
+smoking_proxy_diagnosis,ICD-10-CM,F17,Nicotine dependence diagnosis; proxy only
+smoking_proxy_diagnosis,ICD-10-CM,Z72.0,Tobacco use diagnosis; proxy only
+smoking_proxy_diagnosis,ICD-10-CM,Z87.891,Personal history of nicotine dependence; proxy only
+smoking_proxy_diagnosis,ICD-9-CM,305.1,Tobacco use disorder; proxy only
+smoking_proxy_diagnosis,ICD-9-CM,V15.82,History of tobacco use; proxy only

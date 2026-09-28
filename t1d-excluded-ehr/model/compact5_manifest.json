@@ -1,0 +1,18 @@
+{
+  "model_variant": "compact5",
+  "label": "T1D-excluded 5-group EHR random forest",
+  "bundle": "compact_5group_5y_bundle.joblib",
+  "predictor_contract": "predictors_compact5.csv",
+  "calibrated_bundle_sha256": "f451922634570853f2c930474d08849c1ddb7f92fcf430b454f1014199bd10ba",
+  "predictor_contract_sha256": "67e30f1223c54466949bd0a37f8fa27697d9375a823469c1b8e817f1ab0f447e",
+  "predictor_count": 15,
+  "groups": ["diagnosis::depress", "diagnosis::obesity", "rx::lipid_statin", "rx::mood_antiep", "single::age_index"],
+  "horizon_years": 5,
+  "calibration": {
+    "method": "frozen logistic intercept-and-slope calibration",
+    "fit_source": "validation data before external use",
+    "parameters_source": "embedded bundle; do not refit for the primary analysis",
+    "intercept": 0.39682315878918084,
+    "slope": 1.2394289910790088
+  }
+}

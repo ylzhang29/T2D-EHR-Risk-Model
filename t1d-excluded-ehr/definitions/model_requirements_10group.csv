@@ -1,0 +1,20 @@
+group,predictor,required_source_data,exact_requirement,absent_or_missing_encoding
+Diagnosis: pervasive developmental disorder,PDD,Dated diagnosis records,Any qualifying pervasive developmental disorder diagnosis on or before index,0 when absent
+Diagnosis: pervasive developmental disorder,PDD_age,Dated diagnosis records plus birth_date,Age at first qualifying pervasive developmental disorder diagnosis on or before index,-1 when absent
+Diagnosis: gestational diabetes,gestationaldm,Dated diagnosis records,Any qualifying gestational diabetes diagnosis on or before index,0 when absent
+Diagnosis: gestational diabetes,gestationaldm_age,Dated diagnosis records plus birth_date,Age at first qualifying gestational diabetes diagnosis on or before index,-1 when absent
+Diagnosis: heart failure,hf,Dated diagnosis records,Any qualifying heart-failure diagnosis on or before index,0 when absent
+Diagnosis: heart failure,hf_age,Dated diagnosis records plus birth_date,Age at first qualifying heart-failure diagnosis on or before index,-1 when absent
+Diagnosis: obesity,obesity,Dated diagnosis records,Any qualifying obesity diagnosis on or before index,0 when absent
+Diagnosis: obesity,obesity_age,Dated diagnosis records plus birth_date,Age at first qualifying obesity diagnosis on or before index,-1 when absent
+Diagnosis: sleep disorder,sleep,Dated diagnosis records,Any qualifying sleep-disorder diagnosis on or before index,0 when absent
+Diagnosis: sleep disorder,sleep_age,Dated diagnosis records plus birth_date,Age at first qualifying sleep-disorder diagnosis on or before index,-1 when absent
+Medication: mood stabilizing or antiepileptic,rx_any_mood_antiep,Dated prescription records plus ATC or RxNorm mood_antiep lookup,Any qualifying prescription start before index,0 when absent
+Medication: mood stabilizing or antiepileptic,rx_1y_mood_antiep,Dated prescription records plus ATC or RxNorm mood_antiep lookup,Any qualifying start from index minus 365 days through the day before index,0 when absent
+Medication: mood stabilizing or antiepileptic,rx_dates1y_mood_antiep,Dated prescription records plus ATC or RxNorm mood_antiep lookup,Number of distinct qualifying start dates from index minus 365 days through the day before index,0 when absent
+Medication: mood stabilizing or antiepileptic,rx_days_mood_antiep,Dated prescription records plus ATC or RxNorm mood_antiep lookup,Days from most recent qualifying pre-index start to index,-100 when absent
+Medication: mood stabilizing or antiepileptic,rx_days_mood_antiep_miss,Dated prescription records plus ATC or RxNorm mood_antiep lookup,Indicator that no qualifying start exists before index,1 when absent otherwise 0
+Patient dates,age_index,birth_date plus index_date,Age at index calculated as elapsed days divided by 365.25,Missing not allowed
+Patient dates,age_start,birth_date plus ehr_start_date,Age at start of observable EHR history calculated as elapsed days divided by 365.25,Missing not allowed
+Patient dates,months2index,ehr_start_date plus index_date,Observable EHR history before index calculated as elapsed days divided by 30.4375,Missing not allowed
+Diagnosis: smoking proxy,smoking_proxy_diagnosis,Dated diagnosis records,Any qualifying smoking or tobacco diagnosis on or before index; this is not observed smoking status,0 when absent

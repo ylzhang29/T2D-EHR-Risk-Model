@@ -1,0 +1,4 @@
+variable,type,definition
+dm2,binary,"1 for the first recorded qualifying T2D diagnosis strictly after index and on/before censor date; otherwise 0. Medication evidence is not an outcome."
+event_years,float years,"For dm2=1: (first post-index T2D date-index date)/365.25. Otherwise: (censor date-index date)/365.25."
+censor_date,date,"Earlier of EHR end date and death date when death is available. Death is censoring, not a competing-risk endpoint, in this package."

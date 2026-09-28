@@ -1,0 +1,1 @@
+patient_id,depress,depress_age,obesity,obesity_age,rx_any_lipid_statin,rx_1y_lipid_statin,rx_dates1y_lipid_statin,rx_days_lipid_statin,rx_days_lipid_statin_miss,rx_any_mood_antiep,rx_1y_mood_antiep,rx_dates1y_mood_antiep,rx_days_mood_antiep,rx_days_mood_antiep_miss,age_index,dm2,event_years,cohort,sex,age_group

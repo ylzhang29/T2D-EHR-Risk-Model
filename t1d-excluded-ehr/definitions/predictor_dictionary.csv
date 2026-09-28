@@ -1,0 +1,35 @@
+model_variant,order,group,predictor,type_unit,construction,missing_absent_encoding
+compact5,1,diagnosis::depress,depress,binary,Any qualifying depression diagnosis on or before index,0
+compact5,2,diagnosis::depress,depress_age,float years,Age at first qualifying depression diagnosis on or before index,-1 when absent
+compact5,3,diagnosis::obesity,obesity,binary,Any qualifying obesity diagnosis on or before index,0
+compact5,4,diagnosis::obesity,obesity_age,float years,Age at first qualifying obesity diagnosis on or before index,-1 when absent
+compact5,5,rx::lipid_statin,rx_any_lipid_statin,binary,Any qualifying statin prescription start strictly before index,0
+compact5,6,rx::lipid_statin,rx_1y_lipid_statin,binary,Any qualifying statin start in [index-365 days index),0
+compact5,7,rx::lipid_statin,rx_dates1y_lipid_statin,integer dates,Distinct qualifying statin start dates in [index-365 days index),0
+compact5,8,rx::lipid_statin,rx_days_lipid_statin,float days,Days from most recent qualifying pre-index statin start to index,-100 when absent
+compact5,9,rx::lipid_statin,rx_days_lipid_statin_miss,binary,No qualifying statin start before index,1 when absent otherwise 0
+compact5,10,rx::mood_antiep,rx_any_mood_antiep,binary,Any qualifying mood-stabilizing/antiepileptic prescription start strictly before index,0
+compact5,11,rx::mood_antiep,rx_1y_mood_antiep,binary,Any qualifying mood-stabilizing/antiepileptic start in [index-365 days index),0
+compact5,12,rx::mood_antiep,rx_dates1y_mood_antiep,integer dates,Distinct qualifying starts in [index-365 days index),0
+compact5,13,rx::mood_antiep,rx_days_mood_antiep,float days,Days from most recent qualifying pre-index start to index,-100 when absent
+compact5,14,rx::mood_antiep,rx_days_mood_antiep_miss,binary,No qualifying start before index,1 when absent otherwise 0
+compact5,15,single::age_index,age_index,float years,(index_date-birth_date)/365.25,Missing not allowed
+compact10,1,diagnosis::PDD,PDD,binary,Any qualifying pervasive developmental disorder diagnosis on or before index,0
+compact10,2,diagnosis::PDD,PDD_age,float years,Age at first qualifying PDD diagnosis on or before index,-1 when absent
+compact10,3,diagnosis::gestationaldm,gestationaldm,binary,Any qualifying gestational diabetes diagnosis on or before index,0
+compact10,4,diagnosis::gestationaldm,gestationaldm_age,float years,Age at first qualifying gestational diabetes diagnosis on or before index,-1 when absent
+compact10,5,diagnosis::hf,hf,binary,Any qualifying heart-failure diagnosis on or before index,0
+compact10,6,diagnosis::hf,hf_age,float years,Age at first qualifying heart-failure diagnosis on or before index,-1 when absent
+compact10,7,diagnosis::obesity,obesity,binary,Any qualifying obesity diagnosis on or before index,0
+compact10,8,diagnosis::obesity,obesity_age,float years,Age at first qualifying obesity diagnosis on or before index,-1 when absent
+compact10,9,diagnosis::sleep,sleep,binary,Any qualifying sleep-disorder diagnosis on or before index,0
+compact10,10,diagnosis::sleep,sleep_age,float years,Age at first qualifying sleep-disorder diagnosis on or before index,-1 when absent
+compact10,11,rx::mood_antiep,rx_any_mood_antiep,binary,Any qualifying mood-stabilizing/antiepileptic prescription start strictly before index,0
+compact10,12,rx::mood_antiep,rx_1y_mood_antiep,binary,Any qualifying start in [index-365 days index),0
+compact10,13,rx::mood_antiep,rx_dates1y_mood_antiep,integer dates,Distinct qualifying starts in [index-365 days index),0
+compact10,14,rx::mood_antiep,rx_days_mood_antiep,float days,Days from most recent qualifying pre-index start to index,-100 when absent
+compact10,15,rx::mood_antiep,rx_days_mood_antiep_miss,binary,No qualifying start before index,1 when absent otherwise 0
+compact10,16,single::age_index,age_index,float years,(index_date-birth_date)/365.25,Missing not allowed
+compact10,17,single::age_start,age_start,float years,(ehr_start_date-birth_date)/365.25,Missing not allowed
+compact10,18,single::months2index,months2index,float months,(index_date-ehr_start_date)/30.4375,Missing not allowed
+compact10,19,single::smoking_proxy_diagnosis,smoking_proxy_diagnosis,binary,Any qualifying smoking/tobacco diagnosis code on or before index; diagnosis-code proxy not observed smoking status,0
