@@ -1,6 +1,7 @@
 {
   "model_dir": "../../model",
   "model_variants": ["compact5", "compact10"],
+  "glycemic_lab_available": true,
   "final_input": "../synthetic_site_prepared_final_input.csv",
   "output_dir": "../synthetic_output_final_table",
   "bootstrap": 10,

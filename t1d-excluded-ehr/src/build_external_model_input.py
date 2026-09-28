@@ -137,6 +137,8 @@ def construct_landmarks(patients: pd.DataFrame, diagnoses: pd.DataFrame,
 
 def diabetic_range_lab_ids(labs: pd.DataFrame, patients: pd.DataFrame, audit: dict) -> set[str]:
     require_columns(labs, {"patient_id", "loinc_code", "result_date", "result_value", "result_unit", "fasting_verified"}, "laboratory table")
+    audit["laboratory_source_provided"] = True
+    audit["laboratory_rows_input"] = int(len(labs))
     labs = labs.copy(); labs["patient_id"] = labs.patient_id.astype(str)
     parse_date(labs, "result_date")
     labs["loinc"] = labs.loinc_code.astype(str).str.strip()
@@ -145,11 +147,13 @@ def diabetic_range_lab_ids(labs: pd.DataFrame, patients: pd.DataFrame, audit: di
     labs["fasting"] = labs.fasting_verified.map(lambda value: binary_value(value, "fasting_verified"))
     labs = labs.merge(patients[["patient_id", "index_date"]], on="patient_id", how="inner")
     labs = labs[labs.result_date.notna() & labs.value.notna() & (labs.result_date <= labs.index_date)]
+    audit["laboratory_rows_valid_preindex"] = int(len(labs))
     hba_percent = labs.loinc.isin(["4548-4", "17856-6"]) & labs.unit.isin(["%", "percent"]) & (labs.value >= 6.5)
     hba_ifcc = (labs.loinc == "59261-8") & labs.unit.isin(["mmol/mol", "mmolmol"]) & (labs.value >= 48)
     fasting_mg = (labs.loinc == "1558-6") & (labs.fasting == 1) & labs.unit.isin(["mg/dl", "mgdl"]) & (labs.value >= 126)
     fasting_mmol = (labs.loinc == "1558-6") & (labs.fasting == 1) & labs.unit.isin(["mmol/l", "mmoll"]) & (labs.value >= 7.0)
     abnormal = labs[hba_percent | hba_ifcc | fasting_mg | fasting_mmol]
+    audit["diabetic_range_laboratory_rows"] = int(len(abnormal))
     counts = abnormal.groupby("patient_id").result_date.nunique()
     ids = set(counts[counts >= 2].index)
     audit["patients_excluded_two_or_more_diabetic_range_lab_dates"] = int(len(ids))
@@ -163,7 +167,9 @@ def main() -> None:
     parser.add_argument("--encounters", type=Path)
     parser.add_argument("--non-adhd-random-seed")
     parser.add_argument("--diagnoses", type=Path, required=True)
-    parser.add_argument("--labs", type=Path, required=True)
+    parser.add_argument("--labs", type=Path)
+    parser.add_argument("--glycemic-lab-baseline-exclusion-unavailable", action="store_true",
+                        help="Explicitly allow no laboratory source for the baseline glycemic exclusion rule.")
     parser.add_argument("--medications", type=Path, required=True)
     parser.add_argument("--medication-lookup", type=Path, required=True)
     parser.add_argument("--medication-code-system", choices=("auto", "atc", "rxnorm"), default="auto")
@@ -172,8 +178,12 @@ def main() -> None:
     parser.add_argument("--audit-json", type=Path)
     args = parser.parse_args()
 
+    if args.labs is None and not args.glycemic_lab_baseline_exclusion_unavailable:
+        raise ValueError("--labs is required unless --glycemic-lab-baseline-exclusion-unavailable is specified")
+    if args.labs is not None and args.glycemic_lab_baseline_exclusion_unavailable:
+        raise ValueError("Provide --labs for full-protocol eligibility, or omit it and explicitly declare the unavailable-lab deviation")
     patients = read_table(args.patients); diagnoses = read_table(args.diagnoses)
-    labs = read_table(args.labs); medications = read_table(args.medications)
+    labs = read_table(args.labs) if args.labs is not None else None; medications = read_table(args.medications)
     lookup = pd.read_csv(args.medication_lookup, dtype=str).fillna("")
     require_columns(patients, PATIENT_REQUIRED, "patient table")
     require_columns(diagnoses, {"patient_id", "diagnosis_date"}, "diagnosis table")
@@ -195,7 +205,8 @@ def main() -> None:
     diagnoses["phenotype"] = diagnoses.phenotype.astype(str).str.strip().str.lower()
     audit = {"package_version": "4.0", "patients_input": int(len(patients)),
              "diagnosis_rows_input": int(len(diagnoses)), "diagnosis_rows_invalid_date": invalid_diagnosis_dates,
-             "medication_evidence_used_for_eligibility_or_outcome": False}
+             "medication_evidence_used_for_eligibility_or_outcome": False,
+             "glycemic_lab_baseline_exclusion": "unavailable" if args.glycemic_lab_baseline_exclusion_unavailable else "applied"}
     if args.encounters is not None:
         if not args.non_adhd_random_seed:
             raise ValueError("--encounters requires --non-adhd-random-seed")
@@ -238,8 +249,17 @@ def main() -> None:
     patients = patients[~patients.patient_id.isin(pre_t2d)].copy()
     audit["excluded_t1d_on_or_before_index"] = int(patients.patient_id.isin(pre_t1d).sum())
     patients = patients[~patients.patient_id.isin(pre_t1d)].copy()
-    lab_excluded = diabetic_range_lab_ids(labs, patients, audit)
-    patients = patients[~patients.patient_id.isin(lab_excluded)].copy()
+    if labs is None:
+        audit["laboratory_source_provided"] = False
+        audit["laboratory_rows_input"] = None
+        audit["laboratory_rows_valid_preindex"] = None
+        audit["diabetic_range_laboratory_rows"] = None
+        audit["patients_excluded_two_or_more_diabetic_range_lab_dates"] = None
+        audit["eligible_lab_rule"] = "not applied: source laboratory data unavailable; explicit protocol deviation"
+        audit["analysis_label"] = "T1D-excluded model validation with glycemic-laboratory baseline exclusion unavailable"
+    else:
+        lab_excluded = diabetic_range_lab_ids(labs, patients, audit)
+        patients = patients[~patients.patient_id.isin(lab_excluded)].copy()
 
     output = patients.copy()
     output["age_index"] = (output.index_date - output.birth_date).dt.days / 365.25

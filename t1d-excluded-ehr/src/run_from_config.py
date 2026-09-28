@@ -25,17 +25,24 @@ def main() -> None:
              "--decision-thresholds",str(config.get("decision_thresholds",""))]
     for variant in variants: command += ["--model-variant",variant]
     if config.get("fit_local_recalibration_secondary",False): command.append("--fit-local-recalibration-secondary")
+    glycemic_lab_available=config.get("glycemic_lab_available",True)
+    if not isinstance(glycemic_lab_available,bool):
+        raise ValueError("glycemic_lab_available must be true or false")
     final=resolved("final_input",False)
     if final: command += ["--final-input",str(final)]
     else:
-        for name in ("patients","diagnoses","labs","medications","medication_lookup"):
+        for name in ("patients","diagnoses","medications","medication_lookup"):
             command += ["--"+name.replace("_","-"),str(resolved(name))]
+        labs=resolved("labs",False)
+        if glycemic_lab_available and labs: command += ["--labs",str(labs)]
         command += ["--medication-code-system",str(config.get("medication_code_system","auto"))]
         for name in ("encounters","phenotype_code_list"):
             path=resolved(name,False)
             if path: command += ["--"+name.replace("_","-"),str(path)]
         if config.get("non_adhd_random_seed") not in (None,""):
             command += ["--non-adhd-random-seed",str(config["non_adhd_random_seed"])]
+    if not glycemic_lab_available:
+        command.append("--glycemic-lab-baseline-exclusion-unavailable")
     subprocess.run(command,check=True)
 
 

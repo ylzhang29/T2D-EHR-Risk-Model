@@ -6,6 +6,7 @@
   "non_adhd_random_seed": "SYNTHETIC-SITE-SEED",
   "diagnoses": "../synthetic_raw_diagnoses.csv",
   "labs": "../synthetic_raw_labs.csv",
+  "glycemic_lab_available": true,
   "medications": "../synthetic_raw_medications_atc.csv",
   "medication_lookup": "../../definitions/external_atc_medication_lookup.csv",
   "medication_code_system": "atc",

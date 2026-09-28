@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import importlib.metadata
+import json
 import os
 import platform
 import subprocess
@@ -36,6 +37,7 @@ def main() -> None:
     parser.add_argument("--patients",type=Path); parser.add_argument("--encounters",type=Path)
     parser.add_argument("--non-adhd-random-seed"); parser.add_argument("--diagnoses",type=Path)
     parser.add_argument("--labs",type=Path); parser.add_argument("--medications",type=Path)
+    parser.add_argument("--glycemic-lab-baseline-exclusion-unavailable",action="store_true")
     parser.add_argument("--medication-lookup",type=Path); parser.add_argument("--medication-code-system",choices=("auto","atc","rxnorm"),default="auto")
     parser.add_argument("--phenotype-code-list",type=Path)
     parser.add_argument("--output-dir",type=Path,required=True); parser.add_argument("--bootstrap",type=int,default=500)
@@ -45,7 +47,11 @@ def main() -> None:
     args=parser.parse_args(); variants=list(dict.fromkeys(args.model_variant))
     raw_names=("patients","diagnoses","labs","medications","medication_lookup")
     if args.final_input is None:
-        missing=[name for name in raw_names if getattr(args,name) is None]
+        required_raw=("patients","diagnoses","medications","medication_lookup")
+        missing=[name for name in required_raw if getattr(args,name) is None]
+        if args.labs is None and not args.glycemic_lab_baseline_exclusion_unavailable: missing.append("labs")
+        if args.labs is not None and args.glycemic_lab_baseline_exclusion_unavailable:
+            raise ValueError("Use either --labs or --glycemic-lab-baseline-exclusion-unavailable, not both")
         if missing: raise ValueError("Raw-input mode is missing: "+", ".join(missing))
     elif any(getattr(args,name) is not None for name in raw_names+("encounters","phenotype_code_list")):
         raise ValueError("--final-input cannot be combined with raw longitudinal inputs")
@@ -62,7 +68,11 @@ def main() -> None:
     for variant in variants:
         path=args.model_dir/MODEL_FILES[variant]; bundle=joblib.load(path)
         model_info[variant]={"filename":path.name,"sha256":sha256(path),"features":bundle.get("features"),"calibration":bundle.get("calibration")}
+    glycemic_status="unavailable" if args.glycemic_lab_baseline_exclusion_unavailable else "applied_or_site_attested"
+    analysis_label=("T1D-excluded model validation with glycemic-laboratory baseline exclusion unavailable"
+                    if args.glycemic_lab_baseline_exclusion_unavailable else "T1D-excluded model validation")
     save_json({"package_version":"4.0","analysis":"external validation of first recorded post-landmark T2D diagnosis",
+               "analysis_label":analysis_label,"glycemic_lab_baseline_exclusion":glycemic_status,
                "not_biological_onset_or_clinical_deployment":True,"input_mode":"site_prepared_final_input" if args.final_input else "raw_longitudinal_inputs",
                "models":model_info,"input_files":{name:{"filename":path.name,"sha256":sha256(path)} for name,path in inputs.items() if path},
                "natural_frequency_required":True,"bootstrap_replicates":args.bootstrap,"bootstrap_seed":args.bootstrap_seed,
@@ -79,12 +89,15 @@ def main() -> None:
         if not frame.dm2.isin([0,1,False,True]).all(): raise ValueError("dm2 must contain only 0/1")
         if frame.event_years.isna().any() or (frame.event_years<=0).any(): raise ValueError("event_years must be complete and >0")
         save_json({"input_mode":"site_prepared_final_input","site_attestation_required":True,"patients":len(frame),"events":int(frame.dm2.sum()),
+                   "analysis_label":analysis_label,"glycemic_lab_baseline_exclusion":glycemic_status,
                    "validated_model_contracts":{v:FEATURE_NAMES[v] for v in variants},
                    "construction_not_reaudited":"Landmark, eligibility, predictors, outcome, and censoring must be attested by the site."},audit_path)
     else:
         command=[sys.executable,str(script_dir/"build_external_model_input.py"),"--patients",str(args.patients),"--diagnoses",str(args.diagnoses),
-                 "--labs",str(args.labs),"--medications",str(args.medications),"--medication-lookup",str(args.medication_lookup),
+                 "--medications",str(args.medications),"--medication-lookup",str(args.medication_lookup),
                  "--medication-code-system",args.medication_code_system,"--output",str(constructed),"--audit-json",str(audit_path)]
+        if args.labs: command += ["--labs",str(args.labs)]
+        if args.glycemic_lab_baseline_exclusion_unavailable: command.append("--glycemic-lab-baseline-exclusion-unavailable")
         if args.encounters:
             if not args.non_adhd_random_seed: raise ValueError("--encounters requires --non-adhd-random-seed")
             command += ["--encounters",str(args.encounters),"--non-adhd-random-seed",str(args.non_adhd_random_seed)]
@@ -97,6 +110,24 @@ def main() -> None:
              "--decision-thresholds",args.decision_thresholds]+variants_args
     if args.fit_local_recalibration_secondary: command.append("--fit-local-recalibration-secondary")
     run(command,environment)
+    if args.glycemic_lab_baseline_exclusion_unavailable:
+        warning=("PROTOCOL DEVIATION: T1D-excluded model validation with glycemic-laboratory baseline exclusion unavailable. "
+                 "Participants were not excluded using the two-date diabetic-range HbA1c/verified fasting-glucose rule.\n")
+        (returned/"GLYCEMIC_LAB_BASELINE_EXCLUSION_UNAVAILABLE.txt").write_text(warning)
+        (results/"GLYCEMIC_LAB_BASELINE_EXCLUSION_UNAVAILABLE.txt").write_text(warning)
+    for result_file in results.glob("*.csv"):
+        try:
+            table=pd.read_csv(result_file)
+        except pd.errors.EmptyDataError:
+            table=pd.DataFrame()
+        table.insert(0,"analysis_label",analysis_label)
+        table.insert(1,"glycemic_lab_baseline_exclusion",glycemic_status)
+        table.to_csv(result_file,index=False)
+    metrics_path=results/"external_metrics.json"
+    metrics=json.loads(metrics_path.read_text())
+    metrics["analysis_label"]=analysis_label
+    metrics["glycemic_lab_baseline_exclusion"]=glycemic_status
+    save_json(metrics,metrics_path)
     print("\nExternal validation completed successfully.")
     print(f"LOCAL ONLY — do not return: {local}"); print(f"SAFE RETURN DIRECTORY: {returned}")
 

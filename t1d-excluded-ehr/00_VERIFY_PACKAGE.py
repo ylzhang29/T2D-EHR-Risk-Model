@@ -101,10 +101,21 @@ def synthetic_tests()->None:
         run(common+raw+["--encounters",str(ex/"synthetic_raw_encounters.csv"),"--non-adhd-random-seed","SYNTHETIC-SITE-SEED","--output-dir",str(temp/"longitudinal")],environment)
         raw_no=list(raw); raw_no[1]=str(ex/"synthetic_raw_patients_preassigned_index.csv")
         run(common+raw_no+["--output-dir",str(temp/"no_encounter")],environment)
-        for name in ("final","longitudinal","no_encounter"):
+        no_labs=["--patients",str(ex/"synthetic_raw_patients_preassigned_index.csv"),"--diagnoses",str(ex/"synthetic_raw_diagnoses.csv"),
+                 "--medications",str(ex/"synthetic_raw_medications_atc.csv"),"--medication-lookup",str(defs/"external_atc_medication_lookup.csv"),
+                 "--medication-code-system","atc","--phenotype-code-list",str(defs/"phenotype_code_list_REQUIRED.csv"),
+                 "--glycemic-lab-baseline-exclusion-unavailable"]
+        run(common+no_labs+["--output-dir",str(temp/"no_glycemic_labs")],environment)
+        for name in ("final","longitudinal","no_encounter","no_glycemic_labs"):
             returned=temp/name/"RETURN_TO_COORDINATING_CENTER"/"summary_results"
             if not (returned/"external_metrics.json").is_file(): raise FileNotFoundError(f"Synthetic output missing for {name}")
-    print("[OK] Both models completed all three synthetic workflows")
+        no_lab_returned=temp/"no_glycemic_labs"/"RETURN_TO_COORDINATING_CENTER"
+        no_lab_audit=json.loads((no_lab_returned/"external_model_input_audit.json").read_text())
+        no_lab_metrics=json.loads((no_lab_returned/"summary_results"/"external_metrics.json").read_text())
+        if no_lab_audit.get("glycemic_lab_baseline_exclusion") != "unavailable": raise ValueError("Missing-laboratory audit label absent")
+        if "glycemic-laboratory baseline exclusion unavailable" not in no_lab_metrics.get("analysis_label", ""): raise ValueError("Missing-laboratory results label absent")
+        if not (no_lab_returned/"GLYCEMIC_LAB_BASELINE_EXCLUSION_UNAVAILABLE.txt").is_file(): raise FileNotFoundError("Missing-laboratory warning missing")
+    print("[OK] Both models completed all four synthetic workflows, including the explicit missing-laboratory deviation")
 
 
 def main()->None:

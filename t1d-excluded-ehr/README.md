@@ -85,6 +85,23 @@ Retain prior gestational diabetes. Do not use medication evidence to exclude a
 patient or define the outcome. Keep the cohort's natural event frequency; do
 not balance or match patients using future T2D.
 
+### If HbA1c and verified fasting-glucose data are unavailable
+
+The default pathway requires the laboratory source and applies the two-date
+baseline glycemic exclusion. If the site has no source for either HbA1c or
+verified fasting-glucose data, it may still run a diagnosis-based diabetes-free
+cohort by setting `glycemic_lab_available` to `false` in the configuration.
+The package continues to exclude
+pre/index recorded T2D, recorded T1D, and undated source-positive T2D.
+
+This is a documented protocol deviation, not full-protocol reproduction. The
+audit, run manifest, all returned result tables, and warning file will label it:
+`T1D-excluded model validation with glycemic-laboratory baseline exclusion unavailable`.
+Do not create an empty laboratory file or impute laboratory data to avoid this
+label. A supplied laboratory table with zero valid or zero diabetic-range tests
+is different: it remains the standard laboratory pathway and does not itself
+exclude anyone.
+
 The outcome is the first recorded T2D diagnosis after the prediction date.
 Follow-up ends at that diagnosis, the end of the available EHR record, or death,
 whichever applies first. The analysis accounts for follow-up shorter than five
@@ -99,7 +116,7 @@ years.
 | Patients | Required: `patient_id,birth_date,ehr_start_date,ehr_end_date,cohort,undated_t2d_source_positive`; optional: `death_date,sex` |
 | Encounters | `patient_id,encounter_date` |
 | Diagnoses | `patient_id,code_system,code,diagnosis_date` |
-| Labs | `patient_id,loinc_code,result_date,result_value,result_unit,fasting_verified` |
+| Labs | Required for full-protocol eligibility: `patient_id,loinc_code,result_date,result_value,result_unit,fasting_verified`; omit only with the explicit unavailable-laboratory deviation |
 | ATC medications | `patient_id,atc_code,start_date` |
 | RxNorm medications | `patient_id,rxcui,start_date` |
 
@@ -142,6 +159,19 @@ python src/run_from_config.py \
 
 If encounters are unavailable, provide `index_date` in the patient file and
 use `examples/configs/no_encounter_input.synthetic.json`.
+
+Each supplied JSON configuration includes `glycemic_lab_available`, alongside
+the model-variant selection. Leave it as `true` for full-protocol eligibility.
+If the site has no source for these laboratory data, change only this property
+to `false`:
+
+```json
+"glycemic_lab_available": false
+```
+
+The runner then ignores the `labs` path already present in a longitudinal
+configuration and applies the explicit unavailable-laboratory deviation. The
+same `python src/run_from_config.py --config ...` command is used.
 
 ### Option B: provide the final model table
 
@@ -208,8 +238,10 @@ Use this sequence when the site creates its own one-row-per-patient table.
 2. **Apply baseline eligibility.** Exclude recorded T2D on/before index,
    recorded T1D on/before index, an undated source-positive T2D record, and at
    least two distinct on/before-index dates with diabetic-range HbA1c or
-   verified fasting glucose. Retain gestational diabetes. Require follow-up
-   after index.
+   verified fasting glucose. If no source for those laboratory data exists, set
+   `glycemic_lab_available` to `false` and label the analysis as
+   laboratory exclusion unavailable. Retain gestational diabetes. Require
+   follow-up after index.
 3. **Construct predictors using only pre-index information.** Use diagnoses on
    or before index and medication prescription starts strictly before index.
    The prior-year medication window is index minus 365 days through the day
@@ -314,6 +346,7 @@ external_validation_output/
 └── RETURN_TO_COORDINATING_CENTER/
     ├── run_manifest.json
     ├── external_model_input_audit.json
+    ├── GLYCEMIC_LAB_BASELINE_EXCLUSION_UNAVAILABLE.txt  when that deviation is used
     └── summary_results/
 ```
 
