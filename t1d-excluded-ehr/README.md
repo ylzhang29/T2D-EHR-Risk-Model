@@ -110,6 +110,26 @@ Set `undated_t2d_source_positive` to `1` only when another source table or
 registry indicates T2D for that person but does not provide a usable diagnosis
 date; otherwise set it to `0`. `death_date` may be blank when unavailable.
 
+#### Landmark construction with longitudinal input
+
+The patient table must identify cohort membership: `cohort=1` for ADHD and
+`cohort=0` for non-ADHD. With an encounter file, do **not** precompute
+`index_date`. The package sets the ADHD index to 365 days after the first
+qualifying ADHD diagnosis and selects one unique non-ADHD encounter date using
+the site-defined `non_adhd_random_seed`. Encounter dates may be of any type but
+must fall within the person's EHR start and end dates; duplicate dates are
+ignored.
+
+Choose a stable, nonempty site seed before outcome review and record it in the
+configuration. It is recorded in the run manifest. The current longitudinal
+configuration requires a seed whenever an encounter file is supplied, even for
+an ADHD-only analysis where no non-ADHD date is selected.
+
+If encounters are unavailable, provide `index_date` for every person instead.
+Omit the seed. The package verifies the ADHD rule; the site must document how
+each non-ADHD index date was selected. A site-prepared index date must not use
+future T2D status or post-index information.
+
 Start with:
 
 ```bash
@@ -142,6 +162,10 @@ Do not standardize, rename, round, reorder, or newly impute predictors. The site
 must confirm that it followed the eligibility, timing, outcome, and censoring
 rules because the package cannot reconstruct a site-prepared table.
 
+The scoring table does not need an `index_date` column, but the site must retain
+the locally constructed index date and its construction audit because all
+predictors, exclusions, outcome timing, and follow-up depend on it.
+
 Use the template that matches the selected model:
 
 - `definitions/external_input_template_5group.csv`
@@ -164,6 +188,41 @@ The supplied `examples/configs/final_table_input.synthetic.json` already uses
 this setting and the synthetic final table has the same combined structure.
 For longitudinal input, the package constructs this combined predictor table
 automatically when both variants are selected.
+
+### Constructing a site-prepared final table
+
+Use this sequence when the site creates its own one-row-per-patient table.
+
+1. **Define the cohort and index date.** There is no age restriction. For ADHD,
+   set `index_date` to 365 days after the first qualifying ADHD diagnosis. A
+   non-ADHD cohort is optional; if included, use a reproducibly selected
+   encounter date or a documented encounter-equivalent date.
+2. **Apply baseline eligibility.** Exclude recorded T2D on/before index,
+   recorded T1D on/before index, an undated source-positive T2D record, and at
+   least two distinct on/before-index dates with diabetic-range HbA1c or
+   verified fasting glucose. Retain gestational diabetes. Require follow-up
+   after index.
+3. **Construct predictors using only pre-index information.** Use diagnoses on
+   or before index and medication prescription starts strictly before index.
+   The prior-year medication window is index minus 365 days through the day
+   before index. Calculate age values as elapsed days divided by 365.25 and
+   `months2index` as days from EHR start to index divided by 30.4375.
+4. **Use the required sentinels.** An absent diagnosis has indicator `0` and
+   diagnosis age `-1`. An absent medication history has recency `-100` and its
+   corresponding `_miss` variable `1`. Do not standardize, round, rename,
+   reorder, or newly impute variables.
+5. **Construct outcome and follow-up.** Set `censor_date` to the earlier of EHR
+   end and death date, when death is available. Set `dm2=1` only when the first
+   qualifying T2D diagnosis is strictly after index and on/before `censor_date`;
+   otherwise set `dm2=0`. Set `event_years` to days from index to that diagnosis
+   for events, or to `censor_date` otherwise, divided by 365.25. Medication
+   evidence does not define eligibility or the outcome.
+6. **Select the matching template.** Use the 5-group, 10-group, or both-models
+   template. Keep optional `cohort`, `sex`, and `age_group` columns when
+   available for subgroup reporting.
+
+The model-requirement tables give the exact variable-level source and timing
+rules. The phenotype and medication lookup files define the qualifying codes.
 
 ## Predictor timing
 

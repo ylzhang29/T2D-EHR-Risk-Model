@@ -104,6 +104,21 @@ Medication file:
 Dates use `YYYY-MM-DD`. Patient IDs must be deidentified site-local identifiers.
 Do not include names, medical-record numbers, addresses, or direct identifiers.
 
+#### Landmark construction with longitudinal input
+
+The patient table must identify cohort membership: `cohort=1` for ADHD and
+`cohort=0` for non-ADHD. With an encounter file, do **not** precompute
+`index_date`. The package sets the ADHD index to 365 days after the first
+qualifying ADHD diagnosis and selects one unique non-ADHD encounter date using
+the site-defined `non_adhd_random_seed`. Encounter dates may be of any type but
+must fall within the person's EHR start and end dates; duplicate dates are
+ignored.
+
+Choose a stable, nonempty site seed before outcome review and record it in the
+configuration. It is recorded in the run manifest. The current longitudinal
+configuration requires a seed whenever an encounter file is supplied, even for
+an ADHD-only analysis where no non-ADHD date is selected.
+
 The builder constructs landmarks, predictor dates, medication variables,
 prevalent-T2D exclusions, outcome, censoring time, and age groups. The site seed
 is recorded in the manifest and audit.
@@ -179,6 +194,10 @@ In Mode B, the package validates schema, values, feature order, outcome, and
 follow-up, but cannot verify how the site constructed them. The site must return
 an attestation confirming that the locked landmark, predictor-window, outcome,
 censoring, and natural-frequency rules were followed.
+
+The scoring table does not need an `index_date` column, but the site must retain
+the locally constructed index date and its construction audit because all
+predictors, exclusions, outcome timing, and follow-up depend on it.
 
 ## Outcome and censoring
 
