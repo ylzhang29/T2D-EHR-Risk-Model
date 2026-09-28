@@ -72,3 +72,23 @@ The saved models and their transported calibration must not be refit, tuned, or
 recalibrated for the primary external-validation analysis. Any local
 recalibration is secondary and must be reported separately after the
 transported result.
+
+## Date preparation before creating input files
+
+Use complete ISO dates (`YYYY-MM-DD`) whenever available. If the source has a
+partial calendar date, convert it deterministically **before** creating the
+package input files:
+
+| Source precision | Required input date |
+|---|---|
+| Year only: `YYYY` | `YYYY-07-01` |
+| Year and month: `YYYY-MM` | `YYYY-MM-15` |
+| Full date: `YYYY-MM-DD` | Use the recorded date unchanged |
+
+Apply the same rule consistently to every date field supplied to a package,
+including birth date, EHR start/end dates, death date, diagnoses, encounters,
+medication starts, laboratory results, and any preassigned index date. Do not
+leave partial dates in the input files or apply different rules across people
+or tables. Record the source date precision and this normalization in the
+site's local construction documentation, and report it as a material deviation
+when it could affect index timing, eligibility, predictor windows, or follow-up.

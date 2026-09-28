@@ -106,6 +106,9 @@ years.
 Dates use `YYYY-MM-DD`. Use deidentified site-local patient IDs. The package
 constructs eligibility, predictors, outcome, and follow-up.
 
+Before creating these files, normalize any year-only or year-month source dates
+using the repository-level date-preparation rule in [the root README](../README.md#date-preparation-before-creating-input-files).
+
 Set `undated_t2d_source_positive` to `1` only when another source table or
 registry indicates T2D for that person but does not provide a usable diagnosis
 date; otherwise set it to `0`. `death_date` may be blank when unavailable.
@@ -165,6 +168,10 @@ rules because the package cannot reconstruct a site-prepared table.
 The scoring table does not need an `index_date` column, but the site must retain
 the locally constructed index date and its construction audit because all
 predictors, exclusions, outcome timing, and follow-up depend on it.
+
+Apply the same deterministic partial-date normalization before constructing the
+cohort, predictors, and final table. Retain the original source precision in
+the site-local audit and document any material timing limitation.
 
 Use the template that matches the selected model:
 

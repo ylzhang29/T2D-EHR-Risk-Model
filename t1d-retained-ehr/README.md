@@ -104,6 +104,9 @@ Medication file:
 Dates use `YYYY-MM-DD`. Patient IDs must be deidentified site-local identifiers.
 Do not include names, medical-record numbers, addresses, or direct identifiers.
 
+Before creating these files, normalize any year-only or year-month source dates
+using the repository-level date-preparation rule in [the root README](../README.md#date-preparation-before-creating-input-files).
+
 #### Landmark construction with longitudinal input
 
 The patient table must identify cohort membership: `cohort=1` for ADHD and
@@ -198,6 +201,10 @@ censoring, and natural-frequency rules were followed.
 The scoring table does not need an `index_date` column, but the site must retain
 the locally constructed index date and its construction audit because all
 predictors, exclusions, outcome timing, and follow-up depend on it.
+
+Apply the same deterministic partial-date normalization before constructing the
+cohort, predictors, and final table. Retain the original source precision in
+the site-local audit and document any material timing limitation.
 
 ## Outcome and censoring
 
