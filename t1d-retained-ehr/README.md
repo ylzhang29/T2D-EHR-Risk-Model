@@ -202,22 +202,26 @@ The scoring table does not need an `index_date` column, but the site must retain
 the locally constructed index date and its construction audit because all
 predictors, exclusions, outcome timing, and follow-up depend on it.
 
-Apply the same deterministic partial-date normalization before constructing the
-cohort, predictors, and final table. Retain the original source precision in
-the site-local audit and document any material timing limitation.
+Apply the birth-date and death-date rules in [the root README](../README.md#date-preparation-before-creating-input-files) before calculating age or
+follow-up. Diagnosis, encounter, medication, laboratory, EHR-boundary, and
+index dates require day-level dates. Retain source date precision in the
+site-local audit and document any material timing limitation.
 
 ## Outcome and censoring
 
 ```text
-censor_date = earlier of ehr_end_date and death_date
+ehr_end_date = earlier of last_known_ehr_record and site_study_period_end
+censor_date = earlier of ehr_end_date and death_date, when death_date is available
 dm2 = 1 when index_date < first_t2d_date <= censor_date; otherwise 0
 analysis_end = first_t2d_date when dm2=1; otherwise censor_date
 event_years = (analysis_end - index_date) / 365.25
 ```
 
-At five years, earlier censoring is handled with inverse-probability-of-
-censoring weights rather than treated as a confirmed non-event. Death is treated
-as censoring, not as a modeled competing risk.
+Thus, censoring occurs at death, the last known EHR record, or the end of the
+site study period, whichever is earlier. At five years, earlier censoring is
+handled with inverse-probability-of-censoring weights rather than treated as a
+confirmed non-event. Death is treated as censoring, not as a modeled competing
+risk.
 
 ## Exact 24-predictor contract
 

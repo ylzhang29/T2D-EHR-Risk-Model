@@ -75,20 +75,26 @@ transported result.
 
 ## Date preparation before creating input files
 
-Use complete ISO dates (`YYYY-MM-DD`) whenever available. If the source has a
-partial calendar date, convert it deterministically **before** creating the
-package input files:
+Use complete ISO dates (`YYYY-MM-DD`) whenever available. The original modeling
+workflow used the following deterministic conventions for the two partially
+available demographic/vital-status dates:
 
-| Source precision | Required input date |
-|---|---|
-| Year only: `YYYY` | `YYYY-07-01` |
-| Year and month: `YYYY-MM` | `YYYY-MM-15` |
-| Full date: `YYYY-MM-DD` | Use the recorded date unchanged |
+| Field | Source precision | Required input date |
+|---|---|---|
+| `birth_date` | Year only: `YYYY` | January 1: `YYYY-01-01` |
+| `death_date` | Year and month: `YYYY-MM` | Final calendar day of that month |
+| `death_date` | Year only: `YYYY` | December 31: `YYYY-12-31` |
 
-Apply the same rule consistently to every date field supplied to a package,
-including birth date, EHR start/end dates, death date, diagnoses, encounters,
-medication starts, laboratory results, and any preassigned index date. Do not
-leave partial dates in the input files or apply different rules across people
-or tables. Record the source date precision and this normalization in the
-site's local construction documentation, and report it as a material deviation
-when it could affect index timing, eligibility, predictor windows, or follow-up.
+Use the normalized birth date only for age calculations. Use the normalized
+death date only to determine censoring; death is treated as censoring, not as a
+modeled competing-risk outcome. Do not use these rules for EHR start/end,
+index, diagnosis, encounter, medication, or laboratory dates: those
+time-sensitive fields require a day-level date. If a site cannot provide one,
+it must prespecify and document its method locally and report the resulting
+timing limitation as a material deviation.
+
+For longitudinal input, set `ehr_end_date` to the earlier of the patient's last
+known EHR record and the site's fixed study-period end date. Censoring then
+occurs at the earliest of death (when available), `ehr_end_date`, or the study
+period end. In the package input, the latter two are represented by
+`ehr_end_date`.

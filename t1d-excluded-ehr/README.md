@@ -169,9 +169,10 @@ The scoring table does not need an `index_date` column, but the site must retain
 the locally constructed index date and its construction audit because all
 predictors, exclusions, outcome timing, and follow-up depend on it.
 
-Apply the same deterministic partial-date normalization before constructing the
-cohort, predictors, and final table. Retain the original source precision in
-the site-local audit and document any material timing limitation.
+Apply the birth-date and death-date rules in [the root README](../README.md#date-preparation-before-creating-input-files) before calculating age or
+follow-up. Diagnosis, encounter, medication, laboratory, EHR-boundary, and
+index dates require day-level dates. Retain source date precision in the
+site-local audit and document any material timing limitation.
 
 Use the template that matches the selected model:
 
@@ -218,12 +219,15 @@ Use this sequence when the site creates its own one-row-per-patient table.
    diagnosis age `-1`. An absent medication history has recency `-100` and its
    corresponding `_miss` variable `1`. Do not standardize, round, rename,
    reorder, or newly impute variables.
-5. **Construct outcome and follow-up.** Set `censor_date` to the earlier of EHR
-   end and death date, when death is available. Set `dm2=1` only when the first
-   qualifying T2D diagnosis is strictly after index and on/before `censor_date`;
-   otherwise set `dm2=0`. Set `event_years` to days from index to that diagnosis
-   for events, or to `censor_date` otherwise, divided by 365.25. Medication
-   evidence does not define eligibility or the outcome.
+5. **Construct outcome and follow-up.** Define `ehr_end_date` as the earlier of
+   the patient's last known EHR record and the fixed site study-period end date.
+   Set `censor_date` to the earliest of `ehr_end_date` and death date, when
+   death is available. Thus, censoring occurs at death, the last known record,
+   or the end of the study period, whichever is earlier. Set `dm2=1` only when
+   the first qualifying T2D diagnosis is strictly after index and on/before
+   `censor_date`; otherwise set `dm2=0`. Set `event_years` to days from index
+   to that diagnosis for events, or to `censor_date` otherwise, divided by
+   365.25. Medication evidence does not define eligibility or the outcome.
 6. **Select the matching template.** Use the 5-group, 10-group, or both-models
    template. Keep optional `cohort`, `sex`, and `age_group` columns when
    available for subgroup reporting.
@@ -274,6 +278,29 @@ In the JSON configuration:
 
 To test one model, list only its selection name.
 
+## Prespecified analysis
+
+- Primary probability: the frozen, validation-calibrated five-year risk from
+  each selected model. Do not refit, tune, or recalibrate either model for the
+  primary analysis.
+- Metrics: ROC AUC, average precision, Brier score, calibration intercept and
+  slope, observed/expected ratio, and a calibration table and plot.
+- Confidence intervals: patient-level bootstrap; 500 replicates are
+  recommended for a site analysis.
+- Planned subgroups: sex and age group. When available, ADHD status is an
+  optional descriptive subgroup. Race and ethnicity are not planned subgroup
+  analyses.
+- When both models are tested, report their results side-by-side; the package
+  also produces combined discrimination, calibration, decision-curve, and
+  clinical-impact figures.
+- Executed decision thresholds: 1%, 2%, 3%, 5%, 7.5%, and 10%.
+
+Decision thresholds must correspond to a stated clinical action and resource
+burden and must be set before external outcomes are examined. The primary
+result reports frozen transported calibration. If local recalibration is
+performed, label it as a secondary analysis and do not replace the primary
+result.
+
 ## Results
 
 The package reports discrimination, calibration, decision-curve analysis, and
@@ -290,10 +317,7 @@ external_validation_output/
     └── summary_results/
 ```
 
-Follow the repository-level privacy and output-handling rules. The primary
-analysis reports the frozen transported calibration. If local recalibration is
-performed, label it as a secondary analysis and do not replace the primary
-result.
+Follow the repository-level privacy and output-handling rules.
 
 No independent external-validation results are available until an external
 site completes this process.
