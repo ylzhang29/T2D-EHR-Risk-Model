@@ -5,20 +5,11 @@ definitions. Its cohort definition does **not** exclude recorded
 type 1 diabetes (T1D) at the prediction date; its model contract therefore
 differs from `../t1d-excluded-ehr/`. Use this package's files only together.
 
-Start here for verification, study definitions, input modes, execution, and
-returnable files. The short files in `instructions/` provide checklists and
-file-specific details.
+For setup, synthetic testing, research-use limitations, privacy requirements,
+and the common validation workflow, read the repository [README](../README.md)
+first.
 
-## Research-use notice
-
-This repository is provided for research and independent external validation.
-It is not a medical device, has not been established for clinical decision
-making, and must not be used to diagnose, treat, or determine care for an
-individual. Outputs require local validation and qualified scientific
-interpretation. The software and model are provided without warranties. See
-`RESEARCH_USE_NOTICE.md` before use.
-
-## 1. Purpose and model supplied
+## Model supplied
 
 The package deploys a random-forest model trained using EHR data to
 predict the probability of a first recorded type 2 diabetes diagnosis within
@@ -37,19 +28,17 @@ The distributed bundle does not contain patient identifiers, patient-level
 training records or predictions, or internal computer paths. It retains only
 the fitted model parameters and metadata required to calculate predictions.
 
-## 2. Repository layout
+## Package contents
 
 ```text
 T1D-Retained-EHR-Model/
-├── README.md                  Start-here guide
-├── RESEARCH_USE_NOTICE.md     Intended-use limitations
+├── README.md                  Model-specific guide
 ├── requirements.txt           Python dependencies
 ├── 00_VERIFY_PACKAGE.py       Integrity and synthetic test runner
 ├── model/                     Saved model and model manifest
 ├── src/                       Python programs
 ├── examples/                  Synthetic input tables and configurations
-├── definitions/               Predictor, outcome, phenotype, and medication definitions
-└── instructions/              Detailed construction and output guidance
+└── definitions/               Predictor, outcome, phenotype, and medication definitions
 ```
 
 Important files:
@@ -68,16 +57,11 @@ Important files:
 Most users should run only `src/run_from_config.py`. It calls the other
 components automatically.
 
-## 3. Before using external data
+## Cohort and index
 
-Complete `instructions/SITE_FEASIBILITY_PRECHECK.md` and lock:
-
-1. Available coding systems and phenotype definitions.
-2. Non-ADHD site seed and encounter availability.
-3. ATC combination-product/ingredient handling.
-4. Obesity replication and the BMI limitation.
-5. Age and sex subgroup availability.
-6. The downstream action and prespecified risk thresholds.
+Before examining outcomes, confirm that coding systems, date precision, and
+ingredient-level medication records can support the definitions below. Document
+any material deviation in the returned aggregate materials.
 
 Primary cohort rules:
 
@@ -90,31 +74,7 @@ Primary cohort rules:
 - Require observable follow-up after the landmark.
 - Use the natural-frequency cohort; do not outcome-balance or match on future T2D.
 
-## 4. Install and verify
-
-Use Python 3.8 when possible:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python 00_VERIFY_PACKAGE.py
-```
-
-On Windows PowerShell, activate with `.venv\Scripts\Activate.ps1`.
-
-For a complete technical demonstration using only synthetic records:
-
-```bash
-python 00_VERIFY_PACKAGE.py --run-synthetic-tests
-```
-
-The verifier checks every distributed hash, parses every Python script, loads
-the saved model, verifies the 24-feature order, verifies the frozen five-year
-calibration, and optionally executes all three supported workflows.
-
-## 5. Choose one input mode
+## Input methods
 
 ### Mode A — package constructs the final table
 
@@ -216,7 +176,7 @@ follow-up, but cannot verify how the site constructed them. The site must return
 an attestation confirming that the locked landmark, predictor-window, outcome,
 censoring, and natural-frequency rules were followed.
 
-## 6. Locked outcome and censoring
+## Outcome and censoring
 
 ```text
 censor_date = earlier of ehr_end_date and death_date
@@ -229,7 +189,7 @@ At five years, earlier censoring is handled with inverse-probability-of-
 censoring weights rather than treated as a confirmed non-event. Death is treated
 as censoring, not as a modeled competing risk.
 
-## 7. Exact 24-predictor contract
+## Exact 24-predictor contract
 
 Use the following common definitions:
 
@@ -328,10 +288,9 @@ rx_dates1y is a nonnegative integer
 
 The model's obesity definition allowed diagnosis or BMI >=30, whereas the
 supplied raw-data builder uses diagnosis only. The site must lock its obesity
-rule before evaluating outcomes and report any deviation. See
-`instructions/KNOWN_EXTERNAL_DEVIATIONS.md`.
+rule before evaluating outcomes and report this limitation.
 
-## 8. Prespecified analysis
+## Prespecified analysis
 
 - Primary probability: validation-calibrated five-year risk.
 - Metrics: ROC AUC, average precision, Brier score, calibration intercept and
@@ -344,7 +303,7 @@ rule before evaluating outcomes and report any deviation. See
 Thresholds must correspond to a stated clinical action and resource burden and
 must be locked before external outcomes are examined.
 
-## 9. Output locations and privacy
+## Output structure
 
 ```text
 external_validation_output/
@@ -367,17 +326,11 @@ external_validation_output/
         └── figures
 ```
 
-Original inputs, constructed patient-level predictors, and patient-level raw or
-calibrated predictions remain behind the site's firewall. Never return them
-without separate authorization.
+Follow the repository-level privacy and output-handling rules. The site may
+return only `RETURN_TO_COORDINATING_CENTER`, the Mode B attestation when
+applicable, and a description of material deviations.
 
-The site may return only `RETURN_TO_COORDINATING_CENTER`, the Mode B attestation
-when applicable, and a description of material deviations. The feasibility
-precheck is for local preparation and does not need to be returned. The site
-must apply its disclosure policy to small cells before returning aggregate
-files.
-
-## 10. What success looks like
+## Successful run
 
 The console should end with:
 

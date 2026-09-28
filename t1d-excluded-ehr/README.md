@@ -5,9 +5,9 @@ five-year probability of a first recorded type 2 diabetes (T2D) diagnosis.
 Both models apply the same diabetes-free eligibility rules at the prediction
 date.
 
-This package is for research only. It is not a medical device and must not be
-used to make decisions about an individual patient's care. The outcome is a
-recorded diagnosis, not the biological onset of diabetes.
+For setup, synthetic testing, research-use limitations, privacy requirements,
+and the common validation workflow, read the repository [README](../README.md)
+first.
 
 ## Models
 
@@ -20,18 +20,6 @@ The saved bundles contain the fitted random forest, predictor order, and frozen
 calibration. Do not refit, tune, or recalibrate them for the primary external
 validation. The package checks that the selected model and predictor contract
 match before scoring.
-
-## Install and check the package
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python 00_VERIFY_PACKAGE.py --run-synthetic-tests
-```
-
-On Windows PowerShell, activate with `.venv\Scripts\Activate.ps1`.
 
 ## Who should be included
 
@@ -129,8 +117,10 @@ Medication records do not prove dispensing, adherence, continuous use, or
 treatment duration. ATC records must use the supplied fifth-level ingredient
 codes. Decompose combination products into ingredient records before matching.
 
-For full file schemas, no-encounter use, local output handling, and a short
-precheck, see the files in `instructions/`.
+Before examining outcomes, confirm that the selected model's variables can be
+constructed, the four baseline exclusions can be applied, medication starts
+can be dated, and patient-level data will remain local. Document any material
+deviation in the returned aggregate materials.
 
 ### Phenotype lists
 
@@ -159,11 +149,10 @@ In the JSON configuration:
 
 To test one model, list only its selection name.
 
-## Results and privacy
+## Results
 
 The package reports discrimination, calibration, decision-curve analysis, and
 clinical-impact results with patient-level bootstrap confidence intervals.
-Decision thresholds must be chosen before reviewing outcomes.
 
 ```text
 external_validation_output/
@@ -176,9 +165,10 @@ external_validation_output/
     └── summary_results/
 ```
 
-Keep all source data, constructed patient tables, and individual predictions at
-the external site. Return only disclosure-reviewed aggregate results, figures,
-audits, and manifests. Review small subgroup cells under local policy.
+Follow the repository-level privacy and output-handling rules. The primary
+analysis reports the frozen transported calibration. If local recalibration is
+performed, label it as a secondary analysis and do not replace the primary
+result.
 
 No independent external-validation results are available until an external
 site completes this process.
