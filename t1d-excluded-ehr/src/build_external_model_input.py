@@ -322,7 +322,12 @@ def main() -> None:
     output["event_years"] = (end - output.index_date).dt.days / 365.25
     output = output[np.isfinite(output.event_years) & (output.event_years > 0)].copy()
     validate_predictors(output, ["compact5", "compact10"], strict=True)
-    output["age_group"] = pd.cut(output.age_index, [-np.inf, 17, 34, 49, 64, np.inf], labels=["<18", "18-34", "35-49", "50-64", ">=65"]).astype(str)
+    output["age_group"] = pd.cut(
+        output.age_index,
+        bins=[-np.inf, 18, 35, 50, 65, np.inf],
+        right=False,
+        labels=["<18", "18-34", "35-49", "50-64", ">=65"],
+    ).astype(str)
     optional = [name for name in ("cohort", "sex") if name in output]
     output = output[["patient_id"] + UNION_FEATURE_NAMES + ["dm2", "event_years"] + optional + ["age_group"]]
     audit.update({"patients_output": int(len(output)), "post_index_t2d_events": int(output.dm2.sum()),

@@ -93,6 +93,11 @@ time-sensitive fields require a day-level date. If a site cannot provide one,
 it must prespecify and document its method locally and report the resulting
 timing limitation as a material deviation.
 
+If a site has a permanent emigration or other documented loss-to-follow-up
+date, enter the earlier of death and that date in the package `death_date`
+field. This field is a censoring date for package purposes; document the use of
+emigration in the site's construction audit.
+
 For longitudinal input, set `ehr_end_date` to the earlier of the patient's last
 known EHR record and the site's fixed study-period end date. Censoring then
 occurs at the earliest of death (when available), `ehr_end_date`, or the study

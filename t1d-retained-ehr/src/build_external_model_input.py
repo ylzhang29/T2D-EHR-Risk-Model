@@ -575,7 +575,8 @@ def main() -> None:
     optional = [name for name in ("cohort", "sex") if name in output]
     output["age_group"] = pd.cut(
         output.age_index,
-        bins=[-np.inf, 17, 29, 44, 64, np.inf],
+        bins=[-np.inf, 18, 30, 45, 65, np.inf],
+        right=False,
         labels=["<18", "18-29", "30-44", "45-64", "65+"],
     ).astype(str)
     final_columns = ["patient_id"] + FEATURE_NAMES + ["dm2", "event_years"] + optional + ["age_group"]
